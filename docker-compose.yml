@@ -1,0 +1,13 @@
+version: '3'
+services:
+  app:
+    build: .
+    container_name: reactChatApp
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network
+ 
+networks:
+  my-network:
+    driver: bridge
