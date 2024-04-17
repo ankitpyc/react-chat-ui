@@ -162,6 +162,6 @@ word-wrap: 'break-word';
   height: 40px;
   padding-left: 0px;
   margin-left: 0px;
-  text-align: center;
+padding: 10px;  
   border-bottom: 1px solid #dfdfdf;
 }
