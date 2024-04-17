@@ -150,3 +150,18 @@ word-wrap: 'break-word';
 max-width: 70%;
 word-wrap: 'break-word';
 }
+
+.side-nav-chatbox{
+  border-right: 1px solid #dfdfdf;
+  background: #fbfafa;
+}
+
+.chatHeader{
+  width: inherit;
+  background: #ebebeb;
+  height: 40px;
+  padding-left: 0px;
+  margin-left: 0px;
+  text-align: center;
+  border-bottom: 1px solid #dfdfdf;
+}
