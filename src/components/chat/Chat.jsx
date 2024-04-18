@@ -16,7 +16,7 @@ export default function Chat (){
 
   const {activeUsers} = useSelector(state => state.activeUserReducer)  
   function changeActiveUser(user){
-    console.log(user)
+    console.log("changing active user",user)
     setActiveUser(user)
   }
   function sendMessage (message) {
@@ -26,7 +26,7 @@ export default function Chat (){
         messageType: "CHAT_MESSAGE",
         text: message.trim(),
         recieverID : activeUser.userInfo.userId,
-        userId: localStorage.getItem("userId"),
+        userId: sessionStorage.getItem("userId"),
         date: Date.now()
       };
       console.log(JSON.stringify(chatMessage))
@@ -63,8 +63,11 @@ export default function Chat (){
           dispatch(addActiveUsers({"newUser" : chatMessage}))
         }
       } else {
-        dispatch(addChatMessages({"userId" : activeUser.userId,"sender" : sessionStorage.getItem("userId"),"message" : chatMessage.message}))
-        setMessages((prevMessages) => [...prevMessages, chatMessage]);
+        console.log("user ",sessionStorage.getItem("userId"))
+        console.log(chatMessage)
+        debugger
+        dispatch(addChatMessages({"userId" : chatMessage.recieverID,"sender" : chatMessage.userId,"message" : chatMessage.text}))
+        // setMessages((prevMessages) => [...prevMessages, chatMessage]);
       }
     };
 
@@ -79,7 +82,7 @@ export default function Chat (){
 
   return (
   <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-    <Grid className={'side-nav-chatbox'} xs={3}>
+    <Grid style={{paddingRight:'0px'}} className={'side-nav-chatbox'} xs={3}>
       <ActiveUserList onUsrClick={changeActiveUser}/>
     </Grid>
   <Grid  style={{padding:'8px 0px'}} xs={9}>

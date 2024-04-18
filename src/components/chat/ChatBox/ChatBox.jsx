@@ -3,6 +3,7 @@ import Badge from '@mui/joy/Badge';
 import {useDispatch,useSelector} from 'react-redux';
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import '../../../App.css'
 
 export default function ChatBox({activeUser,sendMessageFn}) {
     const {isActive,userName} = useSelector(state => state.userReducer)
@@ -15,7 +16,9 @@ export default function ChatBox({activeUser,sendMessageFn}) {
     const handleMessageChange = (event) => {
         setNewMessage(event.target.value);
       };
-
+    const sendMessage = () => {
+      sendMessageFn(newMessage)
+    }  
 
 
     return (
@@ -31,7 +34,7 @@ export default function ChatBox({activeUser,sendMessageFn}) {
         &nbsp;{activeUser.userInfo.userName}
           </div>
           <div style={{ marginBottom: '20px', flexGrow: '1', overflowY: 'auto' }}>
-            {messages.map((message, index) => (
+            {activeUser.messages.map((message, index) => (
               <div key={index} className={message.userId === localStorage.getItem("userId") ? 'self-bubble' : 'opp-bubble'}>
                   <div style={{marginRight: '10px' }}>
                     {message.userId == localStorage.getItem("userId") ? ( 
@@ -56,7 +59,7 @@ export default function ChatBox({activeUser,sendMessageFn}) {
               style={{ flex: '1', padding: '8px', marginRight: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
             />
             <button
-              onClick={sendMessageFn(newMessage)}
+              onClick={sendMessage}
               style={{ padding: '8px 16px', borderRadius: '4px', border: 'none', backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }}
             >
               Send
@@ -64,7 +67,7 @@ export default function ChatBox({activeUser,sendMessageFn}) {
           </div>
         </div>
       ) : (
-        <div>Waiting for data...</div>
+        <div style={{height:'100vh',textAlign:'center',background : '#fff',display:'flex',flexDirection : 'column' , justifyContent : 'center'}}><i>Start sending messages to your loved ones 🗽.</i></div>
       )}
 </div>
 
