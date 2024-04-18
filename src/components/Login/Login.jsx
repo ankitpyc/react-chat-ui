@@ -24,7 +24,6 @@ const Login = () => {
         dispatch(setUserDetails({"userId" : userId,"userName" : userName}))
         sessionStorage.setItem("userId",userId)
         sessionStorage.setItem("userName",userName)
-
         navigate("/chat")
       }
       function onNameChange(event) {
