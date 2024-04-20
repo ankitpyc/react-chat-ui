@@ -1,12 +1,11 @@
-import {React,useEffect, useState} from 'react'
-import { Button } from '@mui/base/Button';
+import React,{useEffect, useState} from 'react'
+import  Button  from '@mui/material/Button';
+import { Stack } from '@mui/material';
+import {TextField} from '@mui/material'
 import { Input } from '@mui/base/Input';
 import {setUserDetails} from '../../redux-store/userSlice';
 import {useDispatch,useSelector} from 'react-redux';
-import { useHistory, useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid';
-
-
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const dispatch = useDispatch()
@@ -20,21 +19,31 @@ const Login = () => {
       }, []);
 
     function onClick() {
-        let userId = uuidv4()
+        let userId = crypto.randomUUID()
         dispatch(setUserDetails({"userId" : userId,"userName" : userName}))
         sessionStorage.setItem("userId",userId)
         sessionStorage.setItem("userName",userName)
         navigate("/chat")
       }
-      function onNameChange(event) {
+      function onNameChange(event : any) {
         console.log(event.target.value)
         setUserName(event.target.value)
       }
 return  (
-    <div>
-<Input onChange={onNameChange} name={userName} value={userName}  aria-label="account input" placeholder="Enter Account Number" />
-<Button onClick={onClick} slots={{ root: 'span' }}>Button</Button>
-    </div>
+    <Stack direction="column"
+    style={{height:'100vh'}}
+    justifyContent="center"
+    alignItems="center"
+    spacing={2}>
+<TextField
+  id="outlined-controlled"
+  label="User Name"
+  onChange={onNameChange} name={userName} value={userName}   
+/>
+<Button variant="contained"  onClick={onClick} >Login</Button>
+      </Stack>
+
+    
 )
 }
 

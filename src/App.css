@@ -135,9 +135,8 @@
   margin-right: 5px ;
   background-color: #696969;
   color : #fff;
-  padding: 8px;
-  border-radius : 3px 17px 8px 11px;
-max-width: 70%;
+  border-radius : 3px;
+max-width: 100%;
 word-wrap: 'break-word';
 }
 
@@ -145,10 +144,19 @@ word-wrap: 'break-word';
   margin-right: 5px ;
   background-color: #81d04d;
   color : #333;
-  padding: 8px;
-  border-radius : 3px 17px 8px 11px;
+  border-radius : 3px;
 max-width: 70%;
 word-wrap: 'break-word';
+}
+
+.default-background{
+  height: 100vh;
+    background: white;
+    text-align: center;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .side-nav-chatbox{
@@ -160,8 +168,10 @@ word-wrap: 'break-word';
   width: inherit;
   background: #ebebeb;
   height: 40px;
-  padding-left: 0px;
-  margin-left: 0px;
-padding: 10px;  
   border-bottom: 1px solid #dfdfdf;
 }
+
+.hoverOnListItems:hover{
+  background-color: red;
+}
+
