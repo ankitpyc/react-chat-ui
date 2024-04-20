@@ -3,13 +3,12 @@ import React from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/joy/List';
-import ListItemContent from '@mui/joy/ListItemContent';
 import Typography from '@mui/material/Typography';
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import '../../../App.css'
 import Badge from '@mui/joy/Badge';
+import SendIcon from '@mui/icons-material/Send';
 
 import {useSelector} from 'react-redux';
 import { faker } from '@faker-js/faker';

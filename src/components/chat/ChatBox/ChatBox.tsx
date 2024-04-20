@@ -4,10 +4,14 @@ import Box from '@mui/material/Box';
 import {useDispatch,useSelector} from 'react-redux';
 import React, { useState, useEffect } from 'react';
 import '../../../App.css'
-import { Stack, Typography } from '@mui/material';
+import { Icon, Stack, Typography } from '@mui/material';
 import { RootState } from '../../../redux-store/store';
 import { makeGetUserWithMessages } from '../../../redux-store/userSelector';
 import { faker } from '@faker-js/faker';
+import SendIcon from '@mui/icons-material/Send';
+import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
+import VideoCallIcon from '@mui/icons-material/VideoCall';
+
 export default function ChatBox({activeUserId,sendMessageFn} : any) {
     const {isActive,userName} = useSelector((state:RootState) => state.userReducer)
     const [newMessage, setNewMessage] = useState('');
@@ -30,12 +34,18 @@ export default function ChatBox({activeUserId,sendMessageFn} : any) {
 <div>
   
           <Stack  style={{ margin: '0 auto',  display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'space-between' }}>
-          <Stack p={1} direction='row' alignContent='baseline' alignItems='center' className='chatHeader'>
+          <Stack p={1} direction='row' alignContent='baseline' justifyContent={'space-between'} alignItems='center'  className='chatHeader'>
+          <Stack m={1} spacing={2} alignItems={'center'}  direction={'row'} alignContent={'center'} >
           <Badge badgeInset="14%" color={currUser[0].isActive == true ? 'success' : 'danger'}>
             <Avatar src={faker.image.avatar()} >
               </Avatar> 
         </Badge>
         <Typography>{currUser[0].userInfo.userName}</Typography>
+        </Stack>
+        <Stack direction={'row'} spacing={3} pr={2}>
+          <PhoneEnabledIcon></PhoneEnabledIcon>
+          <VideoCallIcon></VideoCallIcon>
+        </Stack>
           </Stack>
           <div style={{flexGrow:1,marginTop:12}}>
             {currUser[0].messages.map((message:any, index:number) => (
@@ -66,7 +76,7 @@ export default function ChatBox({activeUserId,sendMessageFn} : any) {
               onClick={sendMessage}
               style={{ padding: '8px 16px', borderRadius: '4px', border: 'none', backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }}
             >
-              Send
+              <SendIcon></SendIcon>
             </button>
           </div>
         </Stack>
