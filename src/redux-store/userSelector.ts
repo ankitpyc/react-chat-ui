@@ -6,10 +6,10 @@ export const makeGetUserWithMessages = () =>
   createSelector(
     [selectActiveUsers, (_, userId) => userId],
     (activeUsers, userId) => {
-        debugger
+      debugger
       const user = activeUsers.find((user: {
-          userInfo: any; id: any; 
-}) => user.userInfo.id === userId);
+        userInfo: any; id: any;
+      }) => user.userInfo.id === userId);
 
       if (user) {
         return {

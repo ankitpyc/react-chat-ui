@@ -8,7 +8,6 @@ import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import '../../../App.css'
 import Badge from '@mui/joy/Badge';
-import SendIcon from '@mui/icons-material/Send';
 
 import {useSelector} from 'react-redux';
 import { faker } from '@faker-js/faker';
@@ -25,7 +24,6 @@ import { RootState } from '../../../redux-store/store';
 const ActiveUserList = ({onUsrClick} : any) => {
     const {activeUsers} = useSelector((state : RootState) => state.activeUserReducer)
     const {userName} = useSelector((state : RootState) => state.userReducer)
-    const theme = useTheme()
     return (
       <Stack sx={{background : '#f8FAFF'}} direction='column'>
         <Stack p={2} direction='row' alignItems='center' alignContent='space-around'>
@@ -66,10 +64,9 @@ const ActiveUserList = ({onUsrClick} : any) => {
             </React.Fragment>
           }
         />
-        </ListItemButton>
+      </ListItemButton>
       </ListItem>
-      <Divider variant="inset" component="li" />
-           </Stack>
+      <Divider variant="inset" component="li" /></Stack>
         ))
         }
       </List>
