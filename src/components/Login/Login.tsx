@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Stack, useTheme, TextField, Divider, CircularProgress, Alert, Button } from "@mui/material";
 import { setUserDetails } from "../../redux-store/userSlice";
 import { useDispatch } from "react-redux";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import CircularIndeterminate from "../util/LoadingIcon";
 import { LoginError, UserDetails } from "./LoginError";
 
@@ -11,6 +11,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const navigate = useNavigate();
+  const sessionService = new UserSession();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<UserDetails>({
       userName: "",
@@ -29,7 +30,7 @@ const Login = () => {
     if (email && password) {
       axios.post("http://localhost:3023/LoginUser", { email, password })
         .then(response => {
-          setSessionData(response);
+          sessionService.SetSessionVariables(response.data);
           dispatch(setUserDetails({
             userName: response.data.userName,
             userId: response.data.ID,
@@ -127,11 +128,6 @@ const Login = () => {
     </Grid>
   );
 };
-function setSessionData(response:AxiosResponse) {
-  sessionStorage.setItem("userId", response.data.ID);
-  sessionStorage.setItem("email", response.data.email);
-  sessionStorage.setItem("userName", response.data.userName);
-}
 
 export default Login;
 
