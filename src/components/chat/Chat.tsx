@@ -82,7 +82,7 @@ export default function Chat() {
     console.log("WebSocket connecting");
 
     var ping = createPingMessage();
-    const websocket = new WebSocket("ws:/go-chat-backend-service:2023/ws");
+    const websocket = new WebSocket("ws:/localhost:2023/ws");
     setWs(websocket);
     websocket.onopen = () => {
       console.log(JSON.stringify(ping));

@@ -1,150 +1,137 @@
-import React, { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Stack, useTheme, TextField, Divider } from "@mui/material";
+import { Grid, Stack, useTheme, TextField, Divider, CircularProgress, Alert, Button } from "@mui/material";
 import { setUserDetails } from "../../redux-store/userSlice";
-import { useDispatch, useSelector } from "react-redux";
-
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import axios, { AxiosResponse } from "axios";
+import CircularIndeterminate from "../util/LoadingIcon";
+import { LoginError, UserDetails } from "./LoginError";
 
 const Login = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const navigate = useNavigate();
-  const [userName, setUserName] = useState();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const backendServiceUrl = process.env.REACT_APP_GO_BACKEND;
-  const handleSubmit = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    setEmailError(false);
-    setPasswordError(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<UserDetails>({
+      userName: "",
+      email: "",
+      password: "",
+  });
+  const [alert, setAlert] = useState<LoginError>({ showAlert: false, message: "" });
+  const [errors, setErrors] = useState({ email: false, password: false });
 
-    if (email == "") {
-      setEmailError(true);
-    }
-    if (password == "") {
-      setPasswordError(true);
-    }
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    const { email, password } = formData;
+    setErrors({ email: email === "", password: password === "" });
 
     if (email && password) {
-      console.log(email, password);
-    }
-
-    var postBody = {
-      password: password,
-      email: email,
-    };
-    axios
-      .post(backendServiceUrl + "/LoginUser", postBody)
-      .then(function (response) {
-        console.log(response);
-        sessionStorage.setItem("userId", response.data.ID);
-        sessionStorage.setItem("email", response.data.email);
-        sessionStorage.setItem("userName", response.data.userName);
-        dispatch(
-          setUserDetails({
+      axios.post("http://localhost:3023/LoginUser", { email, password })
+        .then(response => {
+          setSessionData(response);
+          dispatch(setUserDetails({
             userName: response.data.userName,
             userId: response.data.ID,
-          })
-        );
-        navigate("/chat");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+          }));
+          navigate("/chat");
+        })
+        .catch(error => {
+          setAlert({ showAlert: true, message: error.response.data.error });
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
   };
-  useEffect(() => {}, []);
 
-  function onClick() {
-    let userId = crypto.randomUUID();
-    dispatch(setUserDetails({ userId: userId, userName: userName }));
-    sessionStorage.setItem("userId", userId);
-    sessionStorage.setItem("userName", userName);
-    navigate("/chat");
-  }
-  function onNameChange(event: any) {
-    console.log(event.target.value);
-    setUserName(event.target.value);
-  }
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
   return (
     <Grid
-      sx={{
-        background: theme.palette.background.paper,
-        flexGrow: 1,
-        height: "100vh",
-      }}
+      sx={{ background: theme.palette.background.paper, flexGrow: 1, height: "100vh" }}
       container
       spacing={2}
     >
       <Grid
         sx={{
           height: "100vh",
-          backgroundImage:
-            "url(https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjEwMTYtYy0wOF8xLWtzaDZtemEzLmpwZw.jpg)",
+          backgroundImage: "url(https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjEwMTYtYy0wOF8xLWtzaDZtemEzLmpwZw.jpg)",
         }}
-        style={{ paddingRight: "0px" }}
         xs={6}
-      ></Grid>
+      />
       <Grid xs={6}>
         <Stack
           sx={{ height: "90vh" }}
-          justifyContent={"space-around"}
-          alignContent={"center"}
+          justifyContent="space-around"
+          alignItems="center"
           m={4}
           spacing={1}
           p={4}
         >
           <Stack spacing={2}>
-            <h1>Welcome to chatsy</h1>
-            <small>Dont have an account ? Signs Up</small>
+            <h1>Welcome to Chatsy</h1>
+            <small>Don't have an account? Sign Up</small>
             <Divider />
           </Stack>
+          {alert.showAlert && <Alert severity="error">{alert.message}</Alert>}
           <Stack p={12}>
             <form autoComplete="off" onSubmit={handleSubmit}>
               <TextField
                 label="Email"
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                onChange={handleChange}
                 required
                 variant="outlined"
                 color="secondary"
                 type="email"
                 sx={{ mb: 3 }}
                 fullWidth
-                value={email}
-                error={emailError}
+                value={formData.email}
+                error={errors.email}
               />
               <TextField
                 label="Password"
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                onChange={handleChange}
                 required
                 variant="outlined"
                 color="secondary"
                 type="password"
-                value={password}
-                error={passwordError}
+                value={formData.password}
+                error={errors.password}
                 fullWidth
                 sx={{ mb: 3 }}
               />
-              <Button
-                sx={{ width: "100%", borderRadius: "5px" }}
-                variant="contained"
-                color="secondary"
-                type="submit"
-              >
-                Login
-              </Button>
+              {!loading ? (
+                <Button
+                  sx={{ width: "100%", borderRadius: "5px" }}
+                  variant="contained"
+                  color="secondary"
+                  type="submit"
+                >
+                  Login
+                </Button>
+              ) : (
+                <div><CircularIndeterminate /></div>
+              )}
             </form>
           </Stack>
           <Divider />
-
           <Stack>Login With Google</Stack>
         </Stack>
       </Grid>
     </Grid>
   );
 };
+function setSessionData(response:AxiosResponse) {
+  sessionStorage.setItem("userId", response.data.ID);
+  sessionStorage.setItem("email", response.data.email);
+  sessionStorage.setItem("userName", response.data.userName);
+}
 
 export default Login;
+
