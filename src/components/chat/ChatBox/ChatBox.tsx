@@ -17,7 +17,7 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
     (state: RootState) => state.userReducer
   );
   const [newMessage, setNewMessage] = useState("");
-  const currentUser = sessionStorage.getItem("userId");
+  const currentUser = sessionStorage.getItem("ID");
   const { activeUsers } = useSelector(
     (state: RootState) => state.activeUserReducer
   );

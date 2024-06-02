@@ -12,17 +12,13 @@ import "../../App.css";
 import ChatBox from "./ChatBox/ChatBox";
 import ActiveUserList from "./ActiveUsers/ActiveUserList";
 import { useTheme } from "@mui/material";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
 import Message from "./message";
 
 export default function Chat() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const [activeUser, setActiveUser] = useState(null);
-  const currUserId = sessionStorage.getItem("userId");
+  const currUserId = sessionStorage.getItem("ID");
   const currUserName = sessionStorage.getItem("userName");
   const [ws, setWs] = useState(null);
   function changeActiveUser(user: any) {
@@ -87,16 +83,16 @@ export default function Chat() {
     websocket.onopen = () => {
       console.log(JSON.stringify(ping));
       websocket.send(JSON.stringify(ping));
-      dispatch(setUserOffline({ isActive: true }));
+      dispatch(setUserOffline({ isActive: true  }));
       console.log("WebSocket connected");
     };
 
     websocket.onmessage = (event) => {
-      debugger;
+      debugger; 
       const chatMessage = JSON.parse(event.data);
       switch (chatMessage.messageType) {
         case "CONNECT_PING":
-          if (chatMessage.userId != sessionStorage.getItem("userId")) {
+          if (chatMessage.userId != sessionStorage.getItem("ID")) {
             dispatch(addActiveUsers({ newUser: chatMessage }));
           }
           break;

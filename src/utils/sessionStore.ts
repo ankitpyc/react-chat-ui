@@ -3,12 +3,13 @@ interface SessionInf {
     RemoveSessionVariables(key : string) : void
 }
 
-class UserSession implements SessionInf {
+export class UserSession implements SessionInf {
     RemoveSessionVariables(key: string): void {
         sessionStorage.removeItem(key)
     }
     SetSessionVariables(sessionVariables: { [key: string]: string }): void {
-        for (const key in sessionVariables) {
+        debugger;
+        for (const key in sessionVariables) {   
             if (sessionVariables.hasOwnProperty(key)) {
                 sessionStorage.setItem(key, sessionVariables[key]);
             }

@@ -6,6 +6,9 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import CircularIndeterminate from "../util/LoadingIcon";
 import { LoginError, UserDetails } from "./LoginError";
+import { UserSession } from "../../utils/sessionStore";
+import { Block } from "@mui/icons-material";
+
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -74,8 +77,8 @@ const Login = () => {
           p={4}
         >
           <Stack spacing={2}>
-            <h1>Welcome to Chatsy</h1>
-            <small>Don't have an account? Sign Up</small>
+            <h1>Welcome to Chatsy 🦊 </h1>
+            <small>Don't have an account ? Sign Up</small>
             <Divider />
           </Stack>
           {alert.showAlert && <Alert severity="error">{alert.message}</Alert>}
@@ -117,7 +120,7 @@ const Login = () => {
                   Login
                 </Button>
               ) : (
-                <div><CircularIndeterminate /></div>
+                <div style={{display : "block",margin:"auto"}}><CircularIndeterminate  /></div>
               )}
             </form>
           </Stack>
