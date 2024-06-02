@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import "../../../App.css";
-import { Icon, Stack, Typography } from "@mui/material";
+import { Icon, Paper, Stack, Typography } from "@mui/material";
 import { RootState } from "../../../redux-store/store";
 import { makeGetUserWithMessages } from "../../../redux-store/userSelector";
 import { faker } from "@faker-js/faker";
@@ -100,20 +100,20 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
                   />
                 )}
               </Stack>
-              <Stack
-                p={1}
-                pl={1.2}
-                pr={1.5}
-                className={
+              <Paper className={
                   message.sender == currentUser
                     ? "same-bubble-text"
                     : "opp-bubble-text"
-                }
-              >
+                } elevation={1}>
+              <Stack
+                p={1}
+                pl={1.2}
+                pr={1.5}>
                 <Typography noWrap variant="body2">
                   {message.text}
                 </Typography>
               </Stack>
+              </Paper>
             </Stack>
           ))}
         </div>

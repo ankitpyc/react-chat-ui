@@ -131,8 +131,8 @@
 
 .same-bubble-text {
   margin-right: 5px;
-  background-color: #696969;
-  color: #fff;
+  background-color: #696969 !important;
+  color: #fff !important;
   border-radius: 3px;
   max-width: 100%;
   word-wrap: "break-word";
@@ -140,8 +140,8 @@
 
 .opp-bubble-text {
   margin-right: 5px;
-  background-color: #81d04d;
-  color: #333;
+  background-color: #5259dd !important;
+  color: #ffffff !important;
   border-radius: 3px;
   max-width: 70%;
   word-wrap: "break-word";
