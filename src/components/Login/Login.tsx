@@ -33,7 +33,11 @@ const Login = () => {
     if (email && password) {
       axios.post("http://localhost:3023/LoginUser", { email, password })
         .then(response => {
+          debugger;
           sessionService.SetSessionVariables(response.data);
+          sessionService.SetAuthHeaders(response);
+
+          var auth = response.headers["authorization"]
           dispatch(setUserDetails({
             userName: response.data.userName,
             userId: response.data.ID,
