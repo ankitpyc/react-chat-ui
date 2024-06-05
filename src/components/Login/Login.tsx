@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Stack, useTheme, TextField, Divider, CircularProgress, Alert, Button } from "@mui/material";
+import {
+  Grid,
+  Stack,
+  useTheme,
+  TextField,
+  Divider,
+  CircularProgress,
+  Alert,
+  Button,
+} from "@mui/material";
 import { setUserDetails } from "../../redux-store/userSlice";
 import { useDispatch } from "react-redux";
 import CircularIndeterminate from "../util/LoadingIcon";
@@ -8,21 +17,23 @@ import { LoginError, UserDetails } from "./LoginError";
 import { UserSession } from "../../utils/sessionStore";
 import { useAxios } from "../../utils/axiosInterceptor";
 
-
 const Login = () => {
   const dispatch = useDispatch();
 
   const theme = useTheme();
   const navigate = useNavigate();
-  const axiosInstance = useAxios()
+  const axiosInstance = useAxios();
   const sessionService = new UserSession();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<UserDetails>({
-      userName: "",
-      email: "",
-      password: "",
+    userName: "",
+    email: "",
+    password: "",
   });
-  const [alert, setAlert] = useState<LoginError>({ showAlert: false, message: "" });
+  const [alert, setAlert] = useState<LoginError>({
+    showAlert: false,
+    message: "",
+  });
   const [errors, setErrors] = useState({ email: false, password: false });
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -32,20 +43,24 @@ const Login = () => {
     setErrors({ email: email === "", password: password === "" });
 
     if (email && password) {
-      axiosInstance.post("http://localhost:3023/LoginUser", { email, password })
-        .then(response => {
+      axiosInstance
+        .post("http://localhost:3023/LoginUser", { email, password })
+        .then((response) => {
+          console.log("Response Recieved")
           sessionService.SetSessionVariables(response.data);
-          dispatch(setUserDetails({
-            userName: response.data.userName,
-            userId: response.data.ID,
-          }));
+          dispatch(
+            setUserDetails({
+              userName: response.data.userName,
+              userId: response.data.ID,
+            })
+          );
           navigate("/chat");
         })
-        .catch(error => {
-          debugger
-          if (error.code == "ERR_NETWORK"){
-            console.error("ERR_NETWORK")
-            throw error
+        .catch((error) => {
+          debugger;
+          if (error.code == "ERR_NETWORK") {
+            console.error("ERR_NETWORK");
+            throw error;
           }
           setAlert({ showAlert: true, message: error.response.data.error });
           setLoading(false);
@@ -62,14 +77,19 @@ const Login = () => {
 
   return (
     <Grid
-      sx={{ background: theme.palette.background.paper, flexGrow: 1, height: "100vh" }}
+      sx={{
+        background: theme.palette.background.paper,
+        flexGrow: 1,
+        height: "100vh",
+      }}
       container
       spacing={2}
     >
       <Grid
         sx={{
           height: "100vh",
-          backgroundImage: "url(https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjEwMTYtYy0wOF8xLWtzaDZtemEzLmpwZw.jpg)",
+          backgroundImage:
+            "url(https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjEwMTYtYy0wOF8xLWtzaDZtemEzLmpwZw.jpg)",
         }}
         xs={6}
       />
@@ -126,7 +146,9 @@ const Login = () => {
                   Login
                 </Button>
               ) : (
-                <div style={{display : "block",margin:"auto"}}><CircularIndeterminate  /></div>
+                <div style={{ display: "block", margin: "auto" }}>
+                  <CircularIndeterminate />
+                </div>
               )}
             </form>
           </Stack>
@@ -139,4 +161,3 @@ const Login = () => {
 };
 
 export default Login;
-

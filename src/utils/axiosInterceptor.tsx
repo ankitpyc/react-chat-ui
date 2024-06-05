@@ -20,6 +20,7 @@ export const AxiosProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     // Add request interceptor
     axiosInstance.interceptors.request.use(request => {
+        console.log("calling interceptor")
         if (!request.url?.includes("LoginUser")) {
             const token = sessionStorage.getItem("token");
             if (token) {
