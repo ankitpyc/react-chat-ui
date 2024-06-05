@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Stack, useTheme, TextField, Divider, CircularProgress, Alert, Button } from "@mui/material";
 import { setUserDetails } from "../../redux-store/userSlice";
 import { useDispatch } from "react-redux";
-import axiosInstance from '../../utils/axiosInterceptor'
 import CircularIndeterminate from "../util/LoadingIcon";
 import { LoginError, UserDetails } from "./LoginError";
 import { UserSession } from "../../utils/sessionStore";
-import { Block } from "@mui/icons-material";
+import { useAxios } from "../../utils/axiosInterceptor";
 
 
 const Login = () => {
   const dispatch = useDispatch();
+
   const theme = useTheme();
   const navigate = useNavigate();
+  const axiosInstance = useAxios()
   const sessionService = new UserSession();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<UserDetails>({
@@ -41,6 +42,11 @@ const Login = () => {
           navigate("/chat");
         })
         .catch(error => {
+          debugger
+          if (error.code == "ERR_NETWORK"){
+            console.error("ERR_NETWORK")
+            throw error
+          }
           setAlert({ showAlert: true, message: error.response.data.error });
           setLoading(false);
         });
