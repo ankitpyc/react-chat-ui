@@ -11,7 +11,6 @@ export class UserSession implements SessionInf {
         sessionStorage.removeItem(key)
     }
     SetSessionVariables(sessionVariables: { [key: string]: string }): void {
-        debugger;
         for (const key in sessionVariables) {   
             if (sessionVariables.hasOwnProperty(key)) {
                 sessionStorage.setItem(key, sessionVariables[key]);
@@ -21,7 +20,6 @@ export class UserSession implements SessionInf {
     }
 
     SetAuthHeaders( response : AxiosResponse): void {
-        debugger
              var header = response.headers
              if (header['authorization'] !== undefined){
                     var token : string = header['authorization']

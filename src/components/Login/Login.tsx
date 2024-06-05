@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Stack, useTheme, TextField, Divider, CircularProgress, Alert, Button } from "@mui/material";
 import { setUserDetails } from "../../redux-store/userSlice";
 import { useDispatch } from "react-redux";
-import axios from "axios";
+import axiosInstance from '../../utils/axiosInterceptor'
 import CircularIndeterminate from "../util/LoadingIcon";
 import { LoginError, UserDetails } from "./LoginError";
 import { UserSession } from "../../utils/sessionStore";
@@ -31,13 +31,9 @@ const Login = () => {
     setErrors({ email: email === "", password: password === "" });
 
     if (email && password) {
-      axios.post("http://localhost:3023/LoginUser", { email, password })
+      axiosInstance.post("http://localhost:3023/LoginUser", { email, password })
         .then(response => {
-          debugger;
           sessionService.SetSessionVariables(response.data);
-          sessionService.SetAuthHeaders(response);
-
-          var auth = response.headers["authorization"]
           dispatch(setUserDetails({
             userName: response.data.userName,
             userId: response.data.ID,
