@@ -1,22 +1,29 @@
 import { AxiosResponse, AxiosResponseHeaders } from "axios";
+import { setUserDetails } from "../redux-store/userSlice";
+import { useDispatch } from "react-redux";
 
 interface SessionInf {
-    SetSessionVariables(sessionVariables: { [key: string]: string }): void;
+    SetSessionVariables(sessionVariables: { [key: string]: any }): void;
     SetAuthHeaders( response : AxiosResponse): void ;
     RemoveSessionVariables(key : string) : void
 }
 
 export class UserSession implements SessionInf {
+    dispatch = useDispatch()
     RemoveSessionVariables(key: string): void {
         sessionStorage.removeItem(key)
     }
-    SetSessionVariables(sessionVariables: { [key: string]: string }): void {
-        for (const key in sessionVariables) {   
-            if (sessionVariables.hasOwnProperty(key)) {
-                sessionStorage.setItem(key, sessionVariables[key]);
-            }
-        }
-        console.log("Session variables are set:", sessionVariables);
+    SetSessionVariables(sessionVariables: { [key: string]: any }): void {
+        var user = sessionVariables["user"]
+        sessionStorage.setItem("token",sessionVariables["token"])
+        sessionStorage.setItem("ID",user["ID"])
+        sessionStorage.setItem("userName",user["userName"])
+        this.dispatch(
+            setUserDetails({
+              userName: user["userName"],
+              userId: user["ID"],
+            })
+          );
     }
 
     SetAuthHeaders( response : AxiosResponse): void {

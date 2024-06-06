@@ -6,7 +6,6 @@ import {
   useTheme,
   TextField,
   Divider,
-  CircularProgress,
   Alert,
   Button,
 } from "@mui/material";
@@ -46,14 +45,7 @@ const Login = () => {
       axiosInstance
         .post("http://localhost:3023/LoginUser", { email, password })
         .then((response) => {
-          console.log("Response Recieved")
           sessionService.SetSessionVariables(response.data);
-          dispatch(
-            setUserDetails({
-              userName: response.data.userName,
-              userId: response.data.ID,
-            })
-          );
           navigate("/chat");
         })
         .catch((error) => {
@@ -104,7 +96,7 @@ const Login = () => {
         >
           <Stack spacing={2}>
             <h1>Welcome to Chatsy 🦊 </h1>
-            <small>Don't have an account ? Sign Up</small>
+            <small> Don't have an account ? Sign Up </small>
             <Divider />
           </Stack>
           {alert.showAlert && <Alert severity="error">{alert.message}</Alert>}
