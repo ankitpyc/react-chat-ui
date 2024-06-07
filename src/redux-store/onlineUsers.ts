@@ -9,7 +9,7 @@ const activeUsersSlice = createSlice({
                 return user.userInfo.userId == action.payload.newUser.userId
             })
             if (actUser == -1) {
-                state.activeUsers.push({ "userInfo": action.payload.newUser, "messages": [] });
+                state.activeUsers.push({ "userInfo": action.payload.newUser, "messages": [], "unread" : 0 });
             } else {
                 state.activeUsers[actUser].isActive = true
             }
@@ -47,6 +47,7 @@ const activeUsersSlice = createSlice({
             }
             console.log(currentUser[0].userInfo.userId)
             currentUser[0].messages.push({ "text": action.payload.message, "sender": action.payload.sender, "reciever": action.payload.reciever })
+            currentUser[0].unread += 1
             otherUsers.splice(0, 0, currentUser[0])
             debugger
             state.activeUsers = otherUsers

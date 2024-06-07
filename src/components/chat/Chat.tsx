@@ -76,7 +76,6 @@ export default function Chat() {
 
   useEffect(() => {
     console.log("WebSocket connecting");
-
     var ping = createPingMessage();
     const websocket = new WebSocket("ws:/localhost:2023/ws");
     setWs(websocket);
@@ -112,6 +111,9 @@ export default function Chat() {
 
     websocket.onclose = () => {
       dispatch(setUserOffline({ isActive: false }));
+      setInterval(() => {
+      },5000)
+    
       console.log("WebSocket disconnected");
     };
   }, []);

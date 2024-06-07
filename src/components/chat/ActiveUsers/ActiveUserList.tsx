@@ -53,10 +53,11 @@ const ActiveUserList = ({onUsrClick} : any) => {
                 color="text.primary"
               >
               </Typography>
-              {user.messages.length == 0 ? "say Hi 👋 !" : user.messages[user.messages.length-1].sender == sessionStorage.getItem("userId") ? "you : "  + user.messages[user.messages.length-1].text : user.messages[user.messages.length-1].text}
+              {user.messages.length == 0 ? "say Hi 👋 !" : user.messages[user.messages.length-1].sender == sessionStorage.getItem("ID") ? "you : "  + user.messages[user.messages.length-1].text : user.messages[user.messages.length-1].text}
             </React.Fragment>
           }
         />
+        <Badge size='sm' color='primary' badgeContent={user.unread}></Badge>
       </ListItemButton>
       </ListItem>
       <Divider variant="inset" component="li" /></Stack>
