@@ -1,79 +1,90 @@
-import { createSlice, current } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+interface UserInfo {
+    userId: string;
+    userName: string;
+}
+
+interface Message {
+    text: string;
+    sender: string;
+    receiver: string;
+}
+
+interface ActiveUser {
+    userInfo: UserInfo;
+    messages: Message[];
+    unread: number;
+    isActive?: boolean;
+}
+
+interface ActiveUsersState {
+    activeUsers: ActiveUser[];
+}
+
+const findUserIndex = (users: ActiveUser[], userId: string): number => 
+    users.findIndex(user => user.userInfo.userId === userId);
+
+const initialState: ActiveUsersState = { activeUsers: [] };
 
 const activeUsersSlice = createSlice({
     name: 'activeUserDetail',
-    initialState: { "activeUsers": [] },
+    initialState,
     reducers: {
-        addActiveUsers(state, action) {
-            let actUser = state.activeUsers.findIndex((user) => {
-                return user.userInfo.userId == action.payload.newUser.userId
-            })
-            if (actUser == -1) {
-                state.activeUsers.push({ "userInfo": action.payload.newUser, "messages": [], "unread" : 0 });
+        addActiveUsers(state, action: PayloadAction<{ newUser: UserInfo }>) {
+            const { newUser } = action.payload;
+            const userIndex = findUserIndex(state.activeUsers, newUser.userId);
+
+            if (userIndex === -1) {
+                state.activeUsers.push({ userInfo: newUser, messages: [], unread: 0, isActive: true });
             } else {
-                state.activeUsers[actUser].isActive = true
+                state.activeUsers[userIndex].isActive = true;
             }
         },
-        removeInctiveUsers(state, action) {
-            let inactiveUser = state.activeUsers.findIndex((user) => {
-                return user.userInfo.userId == action.payload.userId
-            })
-            debugger
-            if (inactiveUser !== -1) {
-                state.activeUsers[inactiveUser].isActive = false
+        removeInactiveUsers(state, action: PayloadAction<{ userId: string }>) {
+            const { userId } = action.payload;
+            const userIndex = findUserIndex(state.activeUsers, userId);
+
+            if (userIndex !== -1) {
+                state.activeUsers[userIndex].isActive = false;
             }
         },
+        addReceivedMessages(state, action: PayloadAction<{ sender: string; message: string; receiver: string }>) {
+            const { sender, message, receiver } = action.payload;
+            const userIndex = findUserIndex(state.activeUsers, sender);
 
-        isActiveUser(state, action) {
-            let currentUser = state.activeUsers.filter((user) => {
-                console.log("checking ", user)
-                return user.userInfo.userId == action.payload.userId
-            });
-            if (currentUser === undefined || currentUser === null) {
-                addActiveUsers({})
+            if (userIndex !== -1) {
+                const user = state.activeUsers[userIndex];
+                user.messages.push({ text: message, sender, receiver });
+                user.unread += 1;
+
+                // Move the updated user to the front of the array
+                state.activeUsers.splice(userIndex, 1);
+                state.activeUsers.unshift(user);
             }
         },
-        addRecievedMessages(state, action) {
-            let currentUser = state.activeUsers.filter((user) => {
-                console.log("checking ", user.userInfo.userId)
-                return user.userInfo.userId == action.payload.sender
-            })
-            let otherUsers = state.activeUsers.filter((user) => {
-                console.log("checking ", user.userInfo.userId)
-                return user.userInfo.userId !== action.payload.sender
-            })
-            if (currentUser.length == 0) {
+        addSentMessages(state, action: PayloadAction<{ sender: string; message: string; receiver: string }>) {
+            const { sender, message, receiver } = action.payload;
+            const userIndex = findUserIndex(state.activeUsers, receiver);
 
+            if (userIndex !== -1) {
+                const user = state.activeUsers[userIndex];
+                user.messages.push({ text: message, sender, receiver });
+
+                // Move the updated user to the front of the array
+                state.activeUsers.splice(userIndex, 1);
+                state.activeUsers.unshift(user);
             }
-            console.log(currentUser[0].userInfo.userId)
-            currentUser[0].messages.push({ "text": action.payload.message, "sender": action.payload.sender, "reciever": action.payload.reciever })
-            currentUser[0].unread += 1
-            otherUsers.splice(0, 0, currentUser[0])
-            debugger
-            state.activeUsers = otherUsers
         },
-
-        addSentMessages(state, action) {
-            let currentUser = state.activeUsers.filter((user) => {
-                console.log("checking ", user.userInfo.userId)
-                return user.userInfo.userId == action.payload.reciever
-            })
-            let otherUsers = state.activeUsers.filter((user) => {
-                console.log("checking ", user.userInfo.userId)
-                return user.userInfo.userId !== action.payload.reciever
-            })
-            if (currentUser.length == 0) {
-
-            }
-            console.log(currentUser[0].userInfo.userId)
-            currentUser[0].messages.push({ "text": action.payload.message, "sender": action.payload.sender, "reciever": action.payload.reciever })
-            otherUsers.splice(0, 0, currentUser[0])
-            state.activeUsers = otherUsers
-        }
-
+        markAllRead(state,action: PayloadAction<{ sender: string}>) {
+            const { sender } = action.payload;
+            const userIndex = findUserIndex(state.activeUsers,sender)
+            const user = state.activeUsers[userIndex];
+            user.unread = 0;
+        } 
     }
-})
+});
 
-export const { addActiveUsers, removeInctiveUsers, addSentMessages, addRecievedMessages } = activeUsersSlice.actions
+export const { addActiveUsers, removeInactiveUsers, addSentMessages, addReceivedMessages, markAllRead} = activeUsersSlice.actions;
 
-export default activeUsersSlice.reducer
+export default activeUsersSlice.reducer;

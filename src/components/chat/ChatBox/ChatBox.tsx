@@ -21,6 +21,7 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
   const { activeUsers } = useSelector(
     (state: RootState) => state.activeUserReducer
   );
+  debugger
   const currUser = activeUsers.filter(
     (user: any) => user.userInfo.userId == activeUserId
   );

@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setWebsocket, setUserOffline } from "../../redux-store/userSlice";
 import {
   addActiveUsers,
-  addRecievedMessages,
+  addReceivedMessages,
   addSentMessages,
-  removeInctiveUsers,
+  removeInactiveUsers,
+  markAllRead
 } from "../../redux-store/onlineUsers";
 import "../../App.css";
 import ChatBox from "./ChatBox/ChatBox";
@@ -22,8 +23,10 @@ export default function Chat() {
   const currUserName = sessionStorage.getItem("userName");
   const [ws, setWs] = useState(null);
   function changeActiveUser(user: any) {
-    console.log("changing active user", user);
     setActiveUser(user.userInfo.userId);
+    dispatch(markAllRead({
+      sender : user.userInfo.userId
+    }))
   }
 
   function creatChatMessage(type: string, text: string): Message {
@@ -65,7 +68,7 @@ export default function Chat() {
       chatMessage = creatChatMessage("CHAT_MESSAGE", message);
       dispatch(
         addSentMessages({
-          reciever: chatMessage.recieverID,
+          receiver: chatMessage.recieverID,
           sender: chatMessage.userId,
           message: chatMessage.text,
         })
@@ -83,7 +86,6 @@ export default function Chat() {
       console.log(JSON.stringify(ping));
       websocket.send(JSON.stringify(ping));
       dispatch(setUserOffline({ isActive: true  }));
-      console.log("WebSocket connected");
     };
 
     websocket.onmessage = (event) => {
@@ -96,12 +98,12 @@ export default function Chat() {
           }
           break;
         case "CLOSE":
-          dispatch(removeInctiveUsers({ userId: chatMessage.userId }));
+          dispatch(removeInactiveUsers({ userId: chatMessage.userId }));
           break;
         default:
           dispatch(
-            addRecievedMessages({
-              userId: chatMessage.recieverID,
+            addReceivedMessages({
+              receiver: chatMessage.recieverID,
               sender: chatMessage.userId,
               message: chatMessage.text,
             })
