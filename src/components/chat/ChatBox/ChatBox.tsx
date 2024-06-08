@@ -4,13 +4,15 @@ import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import "../../../App.css";
-import { Icon, Paper, Stack, Typography } from "@mui/material";
+import { Paper, Stack, Typography } from "@mui/material";
 import { RootState } from "../../../redux-store/store";
-import { makeGetUserWithMessages } from "../../../redux-store/userSelector";
 import { faker } from "@faker-js/faker";
 import SendIcon from "@mui/icons-material/Send";
 import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
+import CheckIcon from '@mui/icons-material/Check';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import VideoCallIcon from "@mui/icons-material/VideoCall";
+import { ActiveUser, MessageDeliveryStatus, UserMessage } from "../../../redux-store/interf";
 
 export default function ChatBox({ activeUserId, sendMessageFn }: any) {
   const { isActive, userName } = useSelector(
@@ -23,7 +25,7 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
   );
   debugger
   const currUser = activeUsers.filter(
-    (user: any) => user.userInfo.userId == activeUserId
+    (user: ActiveUser) => user.userInfo.userId == activeUserId
   );
   debugger;
 
@@ -76,7 +78,7 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
           </Stack>
         </Stack>
         <div style={{ flexGrow: 1, marginTop: 12 }}>
-          {currUser[0].messages.map((message: any, index: number) => (
+          {currUser[0].messages.map((message : UserMessage, index: number) => (
             <Stack
               direction={message.sender === currentUser ? "row" : "row-reverse"}
               alignItems="center"
@@ -106,13 +108,23 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
                     ? "same-bubble-text"
                     : "opp-bubble-text"
                 } elevation={1}>
+                  <Stack direction={"row"} p={0.5} textAlign={"center"} display={"flex"}>
               <Stack
                 p={1}
-                pl={1.2}
-                pr={1.5}>
+                pl={1.4}
+                pr={1.6}>
                 <Typography noWrap variant="body2">
                   {message.text}
                 </Typography>
+              </Stack>
+              <Stack direction={"column-reverse"}  alignContent={"flex-end"} alignItems={"flex-end"}>
+                {message.status != undefined && message.status == MessageDeliveryStatus.SENT &&
+              <CheckIcon sx={{ fontSize: 10 }}></CheckIcon>
+                }
+                {message.status != undefined && message.status == MessageDeliveryStatus.DELIVERED &&
+              <DoneAllIcon sx={{ fontSize: 10 }}></DoneAllIcon>
+                }
+              </Stack>
               </Stack>
               </Paper>
             </Stack>

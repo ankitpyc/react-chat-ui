@@ -1,12 +1,12 @@
-export default interface Message {
+import { MessageDeliveryStatus,MessageType} from "../../redux-store/interf";
+
+export default interface SystemMessage {
     messageType: string,
     messageId: string,
     userName: string,
     text: string,
-    recieverID: string,
+    receiverID: string,
     userId: string,
-    date: number,
-    isDelivered: boolean,
-    isRead: boolean,
-    isSent: boolean
+    date: string,
+    MessageStatus : MessageDeliveryStatus
 }

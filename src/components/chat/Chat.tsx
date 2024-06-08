@@ -2,20 +2,18 @@ import React, { useState, useEffect } from "react";
 import Grid from "@mui/joy/Grid";
 import { useDispatch, useSelector } from "react-redux";
 import { setWebsocket, setUserOffline } from "../../redux-store/userSlice";
-import {
-  addActiveUsers,
-  addReceivedMessages,
-  addSentMessages,
-  removeInactiveUsers,
-  markAllRead
-} from "../../redux-store/onlineUsers";
+import {markAllRead} from "../../redux-store/onlineUsers";
 import "../../App.css";
 import ChatBox from "./ChatBox/ChatBox";
 import ActiveUserList from "./ActiveUsers/ActiveUserList";
 import { useTheme } from "@mui/material";
 import Message from "./message";
+import SystemMessage from "./message";
+import { MessagingService } from "../../service/MessagingService";
+import { json } from "react-router-dom";
 
 export default function Chat() {
+  const messageService = new MessagingService();
   const dispatch = useDispatch();
   const theme = useTheme();
   const [activeUser, setActiveUser] = useState(null);
@@ -23,99 +21,50 @@ export default function Chat() {
   const currUserName = sessionStorage.getItem("userName");
   const [ws, setWs] = useState(null);
   function changeActiveUser(user: any) {
+    debugger
     setActiveUser(user.userInfo.userId);
     dispatch(markAllRead({
       sender : user.userInfo.userId
     }))
   }
 
-  function creatChatMessage(type: string, text: string): Message {
-    var chatMessage: Message = {
-      messageType: type,
-      userName: currUserName,
-      text: text,
-      recieverID: activeUser,
-      messageId: crypto.randomUUID(),
-      userId: currUserId,
-      isDelivered: false,
-      isRead: false,
-      isSent: false,
-      date: Date.now(),
-    };
-    return chatMessage;
-  }
-
-  function createPingMessage(): Message {
-    var chatMessage: Message = {
-      messageType: "CONNECT_PING",
-      userName: currUserName,
-      text: "",
-      recieverID: "",
-      messageId: crypto.randomUUID(),
-      userId: currUserId,
-      isDelivered: false,
-      isRead: false,
-      isSent: false,
-      date: Date.now(),
-    };
-    return chatMessage;
-  }
-
   const sendMessage = (message: string) => {
     console.log("sending Message");
     if (ws && message.trim() !== "") {
       var chatMessage: Message;
-      chatMessage = creatChatMessage("CHAT_MESSAGE", message);
-      dispatch(
-        addSentMessages({
-          receiver: chatMessage.recieverID,
-          sender: chatMessage.userId,
-          message: chatMessage.text,
-        })
-      );
+      chatMessage = messageService.creatChatMessage(message,currUserName,activeUser,currUserId);
+      messageService.AddMessageToStore(chatMessage)
       ws.send(JSON.stringify(chatMessage));
     }
   };
 
   useEffect(() => {
-    console.log("WebSocket connecting");
-    var ping = createPingMessage();
+    console.log("Initiating websocket connection");
+    var ping = messageService.createPingMessage(currUserName,currUserId);
     const websocket = new WebSocket("ws:/localhost:2023/ws");
     setWs(websocket);
     websocket.onopen = () => {
+      console.info("Websocket connection established")
       console.log(JSON.stringify(ping));
       websocket.send(JSON.stringify(ping));
       dispatch(setUserOffline({ isActive: true  }));
     };
 
     websocket.onmessage = (event) => {
-      debugger; 
-      const chatMessage = JSON.parse(event.data);
-      switch (chatMessage.messageType) {
-        case "CONNECT_PING":
-          if (chatMessage.userId != sessionStorage.getItem("ID")) {
-            dispatch(addActiveUsers({ newUser: chatMessage }));
-          }
-          break;
-        case "CLOSE":
-          dispatch(removeInactiveUsers({ userId: chatMessage.userId }));
-          break;
-        default:
-          dispatch(
-            addReceivedMessages({
-              receiver: chatMessage.recieverID,
-              sender: chatMessage.userId,
-              message: chatMessage.text,
-            })
-          );
+      debugger
+      console.log("recieved message ", JSON.stringify(event.data))
+      const chatMessage : SystemMessage = JSON.parse(event.data);
+      const ackMessage = messageService.handleAndProcessMessageEvent(chatMessage)
+      if (ackMessage !== null ){
+      websocket.send(JSON.stringify(ackMessage))
       }
     };
 
     websocket.onclose = () => {
+     console.log("Closing connection .. ") 
       dispatch(setUserOffline({ isActive: false }));
       setInterval(() => {
       },5000)
-    
       console.log("WebSocket disconnected");
     };
   }, []);
