@@ -23,18 +23,15 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
   const { activeUsers } = useSelector(
     (state: RootState) => state.activeUserReducer
   );
-  debugger
   const currUser = activeUsers.filter(
     (user: ActiveUser) => user.userInfo.userId == activeUserId
   );
-  debugger;
 
   const handleMessageChange = (event: any) => {
     setNewMessage(event.target.value);
   };
   const sendMessage = () => {
     setNewMessage("");
-    debugger;
     sendMessageFn(newMessage);
   };
 

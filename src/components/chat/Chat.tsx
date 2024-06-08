@@ -21,7 +21,6 @@ export default function Chat() {
   const currUserName = sessionStorage.getItem("userName");
   const [ws, setWs] = useState(null);
   function changeActiveUser(user: any) {
-    debugger
     setActiveUser(user.userInfo.userId);
     dispatch(markAllRead({
       sender : user.userInfo.userId
@@ -51,7 +50,6 @@ export default function Chat() {
     };
 
     websocket.onmessage = (event) => {
-      debugger
       console.log("recieved message ", JSON.stringify(event.data))
       const chatMessage : SystemMessage = JSON.parse(event.data);
       const ackMessage = messageService.handleAndProcessMessageEvent(chatMessage)

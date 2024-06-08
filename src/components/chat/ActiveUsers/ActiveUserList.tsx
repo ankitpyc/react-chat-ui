@@ -13,6 +13,7 @@ import { faker } from '@faker-js/faker';
 import "../../../App.css";
 import { Divider, Stack } from '@mui/material'; 
 import { RootState } from '../../../redux-store/store';
+import DoneAllSharpIcon from '@mui/icons-material/DoneAllSharp';
 
 const ActiveUserList = ({onUsrClick} : any) => {
     const {activeUsers} = useSelector((state : RootState) => state.activeUserReducer)

@@ -33,7 +33,6 @@ export class MessagingService implements MessagingInf {
     }
 
     handleAndProcessMessageEvent(chatMessage : SystemMessage): SystemMessage {
-        debugger
         const messageType = chatMessage.messageType.toString()
         switch (messageType) {
             case MessageType.CONNECT_PING.toString():
@@ -45,9 +44,11 @@ export class MessagingService implements MessagingInf {
               this.dispatch(removeInactiveUsers({ userId: chatMessage.userId }));
               break;
             case MessageType.ACK.toString() :
-              this.dispatch(updateMessageStatus({sender : chatMessage.userId,receiver : chatMessage.receiverID, messageId : chatMessage.messageId}))
+                debugger;
+              this.dispatch(updateMessageStatus({sender : chatMessage.userId,receiver : chatMessage.receiverID, messageId : chatMessage.messageId,messageStatus : chatMessage.MessageStatus}))
               break;  
             case MessageType.CHAT.toString():
+                debugger
               this.dispatch(
                 addReceivedMessages({
                   id: chatMessage.messageId,
@@ -58,8 +59,11 @@ export class MessagingService implements MessagingInf {
                   time: chatMessage.date,
                 })
               );
+              if (chatMessage.messageType !== MessageType.ACK) {
                 var sentAck = this.CreateAckMessage(chatMessage.messageId,chatMessage.receiverID,chatMessage.userId,MessageDeliveryStatus.DELIVERED)
                 return sentAck
+              }
+              return null
             default :
             throw new Error("Invalid Message type not handled")
           }

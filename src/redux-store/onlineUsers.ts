@@ -46,6 +46,7 @@ const activeUsersSlice = createSlice({
             }
         },
         addSentMessages(state, action: PayloadAction<{ id : string,sender: string; message: string; receiver: string,deliveryStatus : MessageDeliveryStatus,time : string }>) {
+            debugger;
             const { id ,sender, message, receiver,deliveryStatus ,time } = action.payload;
             const userIndex = findUserIndex(state.activeUsers, receiver);
 
@@ -67,12 +68,12 @@ const activeUsersSlice = createSlice({
             const user = state.activeUsers[userIndex];
             user.unread = 0;
         },
-        updateMessageStatus(state, action : PayloadAction<{sender : string;receiver : string;messageId : string}>) {
+        updateMessageStatus(state, action : PayloadAction<{sender : string;receiver : string;messageId : string,messageStatus : MessageDeliveryStatus}>) {
             debugger
-            const { sender,receiver,messageId } = action.payload;
-            const userIndex = findUserIndex(state.activeUsers,receiver)
+            const { sender,receiver,messageId,messageStatus } = action.payload;
+            const userIndex = findUserIndex(state.activeUsers,sender)
             const messind = findMessageIndex(state.activeUsers[userIndex].messages,messageId)
-            state.activeUsers[userIndex].messages[messind].status = MessageDeliveryStatus.SENT
+            state.activeUsers[userIndex].messages[messind].status = messageStatus
         }
     }
 });
