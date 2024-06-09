@@ -10,7 +10,7 @@ import { useTheme } from "@mui/material";
 import Message from "./message";
 import SystemMessage from "./message";
 import { MessagingService } from "../../service/MessagingService";
-import { json } from "react-router-dom";
+import { ActiveUser, MessageDeliveryStatus } from "../../redux-store/interf";
 
 export default function Chat() {
   const messageService = new MessagingService();
@@ -20,11 +20,18 @@ export default function Chat() {
   const currUserId = sessionStorage.getItem("ID");
   const currUserName = sessionStorage.getItem("userName");
   const [ws, setWs] = useState(null);
-  function changeActiveUser(user: any) {
+  function changeActiveUser(user: ActiveUser) {
+    debugger
     setActiveUser(user.userInfo.userId);
-    dispatch(markAllRead({
-      sender : user.userInfo.userId
-    }))
+    if (user.unread != 0){
+        dispatch(markAllRead({
+          sender : user.userInfo.userId
+        }))
+      debugger
+      var deliveredMessage : Message = messageService.CreateAckMessage("",currUserId,user.userInfo.userId,MessageDeliveryStatus.READ) 
+      debugger
+      ws.send(JSON.stringify(deliveredMessage));
+    }
   }
 
   const sendMessage = (message: string) => {

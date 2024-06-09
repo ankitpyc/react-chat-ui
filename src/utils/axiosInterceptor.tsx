@@ -29,7 +29,6 @@ export const AxiosProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         }
         return request;
     }, error => {
-        debugger
         Promise.reject(error)
     });
 
@@ -41,7 +40,6 @@ export const AxiosProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         },
         error => {
             if (error.response) {   
-                debugger
                 const status = error.response.status;
                 if (status === 401 || status === 403) {
                     console.log('Redirecting to login...');

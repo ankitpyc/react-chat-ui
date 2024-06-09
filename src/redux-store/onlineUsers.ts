@@ -22,6 +22,8 @@ const activeUsersSlice = createSlice({
                 state.activeUsers[userIndex].isActive = true;
             }
         },
+
+        //TODO :: Dont remove this from the array , keep it inactive
         removeInactiveUsers(state, action: PayloadAction<{ userId: string }>) {
             const { userId } = action.payload;
             const userIndex = findUserIndex(state.activeUsers, userId);
@@ -37,7 +39,7 @@ const activeUsersSlice = createSlice({
 
             if (userIndex !== -1) {
                 const user = state.activeUsers[userIndex];
-                user.messages.push({id : id ,text: message, sender, receiver,sentTime : time,});
+                user.messages.push({id : id ,text: message, sender, receiver,sentTime : time,status : MessageDeliveryStatus.SENT});
                 user.unread += 1;
 
                 // Move the updated user to the front of the array
@@ -49,12 +51,13 @@ const activeUsersSlice = createSlice({
             debugger;
             const { id ,sender, message, receiver,deliveryStatus ,time } = action.payload;
             const userIndex = findUserIndex(state.activeUsers, receiver);
-
+            debugger    
             if (userIndex !== -1) {
                 const user = state.activeUsers[userIndex];  
                 user.messages.push({
                     id : id ,
-                    text: message, sender, receiver, status: deliveryStatus,
+                    text: message, sender, receiver, 
+                    status: deliveryStatus,
                     sentTime: time
                 });
                 // Move the updated user to the front of the array
@@ -62,16 +65,26 @@ const activeUsersSlice = createSlice({
                 state.activeUsers.unshift(user);
             }
         },
+        // this marks all the messages of the user read 
         markAllRead(state,action: PayloadAction<{ sender: string}>) {
+            debugger
             const { sender } = action.payload;
             const userIndex = findUserIndex(state.activeUsers,sender)
             const user = state.activeUsers[userIndex];
+            // fetching all unread messages . 
+            user.messages.forEach(message => {
+                if(message.status !== MessageDeliveryStatus.READ){
+                    message.status = MessageDeliveryStatus.READ
+                }
+            })
             user.unread = 0;
         },
         updateMessageStatus(state, action : PayloadAction<{sender : string;receiver : string;messageId : string,messageStatus : MessageDeliveryStatus}>) {
-            debugger
             const { sender,receiver,messageId,messageStatus } = action.payload;
             const userIndex = findUserIndex(state.activeUsers,sender)
+            if ((messageId == "" || messageId == undefined) && messageStatus == MessageDeliveryStatus.READ) {
+
+            }
             const messind = findMessageIndex(state.activeUsers[userIndex].messages,messageId)
             state.activeUsers[userIndex].messages[messind].status = messageStatus
         }

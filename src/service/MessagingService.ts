@@ -1,7 +1,7 @@
 import SystemMessage from "../components/chat/message";
 import { MessageDeliveryStatus, MessageType } from "../redux-store/interf";
 import { useDispatch } from "react-redux";
-import { addActiveUsers, addReceivedMessages, addSentMessages, removeInactiveUsers, updateMessageStatus } from "../redux-store/onlineUsers";
+import { addActiveUsers, addReceivedMessages, addSentMessages, markAllRead, removeInactiveUsers, updateMessageStatus } from "../redux-store/onlineUsers";
 
 
 interface MessagingInf {
@@ -27,7 +27,7 @@ export class MessagingService implements MessagingInf {
               sender: chatMessage.userId,
               message: chatMessage.text,
               deliveryStatus : MessageDeliveryStatus.PUSHED,
-              time : new Date().toString()
+              time : formatDateTime(new Date().toString())
             })
           );
     }
@@ -44,7 +44,11 @@ export class MessagingService implements MessagingInf {
               this.dispatch(removeInactiveUsers({ userId: chatMessage.userId }));
               break;
             case MessageType.ACK.toString() :
-                debugger;
+                if(chatMessage.MessageStatus == MessageDeliveryStatus.READ){
+                    this.dispatch(markAllRead({sender : chatMessage.userId}))
+                    break;
+                }
+
               this.dispatch(updateMessageStatus({sender : chatMessage.userId,receiver : chatMessage.receiverID, messageId : chatMessage.messageId,messageStatus : chatMessage.MessageStatus}))
               break;  
             case MessageType.CHAT.toString():
@@ -56,7 +60,7 @@ export class MessagingService implements MessagingInf {
                   sender: chatMessage.userId,
                   message: chatMessage.text,
                   deliveryStatus: chatMessage.MessageStatus,
-                  time: chatMessage.date,
+                  time: formatDateTime(chatMessage.date),
                 })
               );
               if (chatMessage.messageType !== MessageType.ACK) {
@@ -113,4 +117,11 @@ export class MessagingService implements MessagingInf {
         }
     }
 
- 
+function formatDateTime(date: string): string {
+    const d = new Date('Sun Jun 09 2024 14:22:52 GMT+0530 (India Standard Time)');
+    const hours = d.getHours().toString().padStart(2, '0');
+    const minutes = d.getMinutes().toString().padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}`;
+    return formattedTime
+}
+

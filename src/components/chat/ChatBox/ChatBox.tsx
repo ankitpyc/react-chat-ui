@@ -114,12 +114,22 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
                   {message.text}
                 </Typography>
               </Stack>
-              <Stack direction={"column-reverse"}  alignContent={"flex-end"} alignItems={"flex-end"}>
-                {message.status != undefined && message.status == MessageDeliveryStatus.SENT &&
-              <CheckIcon sx={{ fontSize: 10 }}></CheckIcon>
+              
+              <Stack direction={"column"}  alignContent={"flex-end"} alignItems={"flex-end"} justifyContent={'space-between'}>
+              <Stack>
+                <span style={{fontSize : '12px'}}>{message.sentTime}</span>
+              </Stack>  
+                {
+                message.status != undefined && message.sender == currentUser  && message.status == MessageDeliveryStatus.SENT &&
+                  <CheckIcon sx={{ fontSize: 10 }}></CheckIcon>
                 }
-                {message.status != undefined && message.status == MessageDeliveryStatus.DELIVERED &&
-              <DoneAllIcon sx={{ fontSize: 10 }}></DoneAllIcon>
+                {
+                message.status != undefined && message.sender == currentUser && message.status == MessageDeliveryStatus.DELIVERED &&
+                  <DoneAllIcon sx={{ fontSize: 10 }}></DoneAllIcon>
+                }
+                {
+                message.status != undefined && message.sender == currentUser &&message.status == MessageDeliveryStatus.READ &&
+                   <DoneAllIcon color={'info'} sx={{ fontSize: 10 }}></DoneAllIcon>
                 }
               </Stack>
               </Stack>
