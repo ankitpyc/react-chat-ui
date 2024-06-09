@@ -17,6 +17,7 @@ import { RootState } from '../../../redux-store/store';
 const ActiveUserList = ({onUsrClick} : any) => {
     const {activeUsers} = useSelector((state : RootState) => state.activeUserReducer)
     const {userName} = useSelector((state : RootState) => state.userReducer)
+    debugger
     return (
       <Stack sx={{background : '#f8FAFF'}} direction='column'>
         <Stack p={2} direction='row' alignItems='center' alignContent='space-around'>

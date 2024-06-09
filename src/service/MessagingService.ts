@@ -29,7 +29,7 @@ export class MessagingService implements MessagingInf {
               deliveryStatus : MessageDeliveryStatus.PUSHED,
               time : formatDateTime(new Date().toString())
             })
-          );
+          );    
     }
 
     handleAndProcessMessageEvent(chatMessage : SystemMessage): SystemMessage {
@@ -91,7 +91,7 @@ export class MessagingService implements MessagingInf {
     createPingMessage(currUserName : string,userId :string): SystemMessage {
         var chatMessage: SystemMessage = {
             messageType:MessageType.CONNECT_PING.toString(),
-            userName: "",
+            userName: currUserName,
             text: "",
             receiverID: "",
             messageId: crypto.randomUUID(),

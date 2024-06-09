@@ -49,7 +49,6 @@ const Login = () => {
           navigate("/chat");
         })
         .catch((error) => {
-          debugger;
           if (error.code == "ERR_NETWORK") {
             console.error("ERR_NETWORK");
             throw error;

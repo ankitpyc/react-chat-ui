@@ -1,6 +1,7 @@
 import { AxiosResponse, AxiosResponseHeaders } from "axios";
 import { setUserDetails } from "../redux-store/userSlice";
 import { useDispatch } from "react-redux";
+import { de } from "@faker-js/faker";
 
 interface SessionInf {
     SetSessionVariables(sessionVariables: { [key: string]: any }): void;
@@ -14,6 +15,7 @@ export class UserSession implements SessionInf {
         sessionStorage.removeItem(key)
     }
     SetSessionVariables(sessionVariables: { [key: string]: any }): void {
+        debugger
         var user = sessionVariables["user"]
         sessionStorage.setItem("token",sessionVariables["token"])
         sessionStorage.setItem("ID",user["ID"])
