@@ -9,7 +9,6 @@ import {
   Alert,
   Button,
 } from "@mui/material";
-import { setUserDetails } from "../../redux-store/userSlice";
 import { useDispatch } from "react-redux";
 import CircularIndeterminate from "../util/LoadingIcon";
 import { LoginError, UserDetails } from "./LoginError";
@@ -17,8 +16,6 @@ import { UserSession } from "../../utils/sessionStore";
 import { useAxios } from "../../utils/axiosInterceptor";
 
 const Login = () => {
-  const dispatch = useDispatch();
-
   const theme = useTheme();
   const navigate = useNavigate();
   const axiosInstance = useAxios();
@@ -85,7 +82,7 @@ const Login = () => {
         xs={6}
       />
       <Grid xs={6}>
-        <Stack
+        <Stack 
           sx={{ height: "90vh" }}
           justifyContent="space-around"
           alignItems="center"
@@ -93,8 +90,8 @@ const Login = () => {
           spacing={1}
           p={4}
         >
-          <Stack spacing={2}>
-            <h1>Welcome to Chatsy 🦊 </h1>
+          <Stack className="text-center" spacing={2}>
+            <h1 className="text-2xl">Welcome to Chatsy 🦊 </h1>
             <small> Don't have an account ? Sign Up </small>
             <Divider />
           </Stack>
