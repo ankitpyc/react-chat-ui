@@ -81,6 +81,7 @@ const activeUsersSlice = createSlice({
         },
         updateMessageStatus(state, action : PayloadAction<{sender : string;receiver : string;messageId : string,messageStatus : MessageDeliveryStatus}>) {
             const { sender,receiver,messageId,messageStatus } = action.payload;
+            debugger
             const userIndex = findUserIndex(state.activeUsers,sender)
             if ((messageId == "" || messageId == undefined) && messageStatus == MessageDeliveryStatus.READ) {
 

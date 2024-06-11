@@ -2,7 +2,7 @@ import Avatar from "@mui/joy/Avatar";
 import Badge from "@mui/joy/Badge";
 import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../../../App.css";
 import { Paper, Stack, Typography } from "@mui/material";
 import { RootState } from "../../../redux-store/store";
@@ -13,26 +13,31 @@ import CheckIcon from '@mui/icons-material/Check';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import { ActiveUser, MessageDeliveryStatus, UserMessage } from "../../../redux-store/interf";
+import ActiveContext from "../../../redux-store/context/UserContext";
+import { ChatManager } from "../../../service/ChatManager";
+import { SocketManager } from "../../../service/SocketManager";
 
-export default function ChatBox({ activeUserId, sendMessageFn }: any) {
-  const { isActive, userName } = useSelector(
-    (state: RootState) => state.userReducer
-  );
+interface SockProps {
+  socketManager : SocketManager
+}
+
+export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
+  debugger
+  const {activeUser} = useContext(ActiveContext)
   const [newMessage, setNewMessage] = useState("");
   const currentUser = sessionStorage.getItem("ID");
-  const { activeUsers } = useSelector(
-    (state: RootState) => state.activeUserReducer
-  );
-  const currUser = activeUsers.filter(
-    (user: ActiveUser) => user.userInfo.userId == activeUserId
-  );
-
-  const handleMessageChange = (event: any) => {
-    setNewMessage(event.target.value);
-  };
+  const handleMessageChange = (event: any) => {setNewMessage(event.target.value);};
+  const {activeUsers} = useSelector((state : RootState) => state.activeUserReducer)
+  const chatService = new ChatManager(socketManager)
+  const currentUsers = activeUsers.filter((user: ActiveUser) => 
+    user.userInfo.userId == activeUser.userInfo.userId
+  ) 
+    
   const sendMessage = () => {
+    debugger
+    chatService.sendMessage(newMessage,activeUser)
     setNewMessage("");
-    sendMessageFn(newMessage);
+
   };
 
   return (
@@ -63,11 +68,11 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
           >
             <Badge
               badgeInset="14%"
-              color={currUser[0].isActive == true ? "success" : "danger"}
+              color={currentUsers[0].isActive == true ? "success" : "danger"}
             >
               <Avatar src={faker.image.avatar()}></Avatar>
             </Badge>
-            <Typography>{currUser[0].userInfo.userName}</Typography>
+            <Typography>{currentUsers[0].userInfo.userName}</Typography>
           </Stack>
           <Stack direction={"row"} spacing={3} pr={2}>
             <PhoneEnabledIcon></PhoneEnabledIcon>
@@ -75,7 +80,8 @@ export default function ChatBox({ activeUserId, sendMessageFn }: any) {
           </Stack>
         </Stack>
         <div style={{ flexGrow: 1, marginTop: 12 }}>
-          {currUser[0].messages.map((message : UserMessage, index: number) => (
+          {
+          currentUsers[0].messages.map((message : UserMessage, index: number) => (
             <Stack
               direction={message.sender === currentUser ? "row" : "row-reverse"}
               alignItems="center"

@@ -1,5 +1,5 @@
 import Avatar from '@mui/joy/Avatar';
-import React from 'react';
+import React, { useContext } from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/joy/List';
@@ -8,16 +8,26 @@ import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import '../../../App.css'
 import Badge from '@mui/joy/Badge';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { faker } from '@faker-js/faker';
 import "../../../App.css";
 import { Divider, Stack } from '@mui/material'; 
 import { RootState } from '../../../redux-store/store';
+import ActiveContext from '../../../redux-store/context/UserContext';
+import { ActiveUser } from '../../../redux-store/interf';
+import { markAllRead } from '../../../redux-store/onlineUsers';
 
-const ActiveUserList = ({onUsrClick} : any) => {
+const ActiveUserList = () => {
+    const dispatch = useDispatch()
     const {activeUsers} = useSelector((state : RootState) => state.activeUserReducer)
     const {userName} = useSelector((state : RootState) => state.userReducer)
-    debugger
+    const {setActiveUser} = useContext(ActiveContext)
+    function UpdateActiveUser(user:ActiveUser) {
+      setActiveUser(user)
+      if (user.unread != 0) {
+        dispatch(markAllRead({sender : user.userInfo.userId}))
+      }
+    }
     return (
       <Stack sx={{background : '#f8FAFF'}} direction='column'>
         <Stack p={2} direction='row' alignItems='center' alignContent='space-around'>
@@ -33,7 +43,7 @@ const ActiveUserList = ({onUsrClick} : any) => {
             {activeUsers.filter(user => user.isActive == true).map((user, index) => (
               <Stack>
       <ListItem  alignItems="flex-start">
-      <ListItemButton className='hoverOnListItems'  onClick={() => onUsrClick(user)}>
+      <ListItemButton className='hoverOnListItems'  onClick={() => UpdateActiveUser(user)}>
         <ListItemAvatar>
         <Badge  anchorOrigin={{
     vertical: 'bottom',

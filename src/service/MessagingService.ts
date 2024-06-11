@@ -14,8 +14,6 @@ interface MessagingInf {
 
 
 export class MessagingService implements MessagingInf {
-
-
     
     dispatch = useDispatch();
     
@@ -44,11 +42,12 @@ export class MessagingService implements MessagingInf {
               this.dispatch(removeInactiveUsers({ userId: chatMessage.userId }));
               break;
             case MessageType.ACK.toString() :
+              debugger
                 if(chatMessage.MessageStatus == MessageDeliveryStatus.READ){
                     this.dispatch(markAllRead({sender : chatMessage.userId}))
                     break;
                 }
-
+                 debugger 
               this.dispatch(updateMessageStatus({sender : chatMessage.userId,receiver : chatMessage.receiverID, messageId : chatMessage.messageId,messageStatus : chatMessage.MessageStatus}))
               break;  
             case MessageType.CHAT.toString():
