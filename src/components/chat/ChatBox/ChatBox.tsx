@@ -37,23 +37,22 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
     debugger
     chatService.sendMessage(newMessage,activeUser)
     setNewMessage("");
-
   };
 
   return (
     <div>
       <Stack
-      className="py-2"
         style={{
           margin: "0 auto",
           display: "flex",
           flexDirection: "column",
           height: "100vh",
           justifyContent: "space-between",
+          backgroundColor:"#F5F8FA"
         }}
       >
         <Stack
-          p={1}
+          p={4}
           direction="row"
           alignContent="baseline"
           justifyContent={"space-between"}
@@ -75,9 +74,9 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
             </Badge>
             <Typography>{currentUsers[0].userInfo.userName}</Typography>
           </Stack>
-          <Stack direction={"row"} spacing={3} pr={2}>
-            <PhoneEnabledIcon></PhoneEnabledIcon>
-            <VideoCallIcon></VideoCallIcon>
+          <Stack direction={"row"} spacing={3} pr={2}>  
+            <PhoneEnabledIcon className="icons"></PhoneEnabledIcon>
+            <VideoCallIcon sx={{backgroundColor : '#dc67bf'}} className="icons"></VideoCallIcon>
           </Stack>
         </Stack>
         <div style={{ flexGrow: 1, marginTop: 12 }}>

@@ -40,8 +40,8 @@ const ActiveUserList : React.FC<SockProps> = ({ socketManager }) =>  {
 
     }
     return (
-      <Stack sx={{background : '#f8FAFF'}} direction='column'>
-        <Stack p={2} direction='row' alignItems='center' alignContent='space-around'>
+      <Stack sx={{background : '#FFFFFF'}} direction='column'>
+        <Stack p={1.5} direction='row' alignItems='center' alignContent='space-around'>
             <Avatar alt={userName} src={faker.image.avatar()} />
             <Typography sx={{marginLeft:'12px'}} variant='body1'>{userName}</Typography>
             </Stack>

@@ -132,8 +132,8 @@
 
 .same-bubble-text {
   margin-right: 5px;
-  background-color: #85438b !important;
-  color: white !important;
+  background-color: #ffffff !important;
+  color: black !important;
   border-radius: 3px;
   max-width: 100%;
   word-wrap: "break-word";
@@ -141,7 +141,7 @@
 
 .opp-bubble-text {
   margin-right: 5px;
-  background-color: #272a5d !important;
+  background-color: #9C6CE8 !important;
   color: white !important;
   border-radius: 3px;
   max-width: 70%;
@@ -165,9 +165,16 @@
 
 .chatHeader {
   width: inherit;
-  background: #ebebeb;
+  background: #fdfdfd;
   height: 40px;
   border-bottom: 1px solid #dfdfdf;
+}
+
+.icons{
+  background: green;
+    color: white;
+    padding: 5px;
+    border-radius: 12px;
 }
 
 .hoverOnListItems:hover {

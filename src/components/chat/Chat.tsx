@@ -19,7 +19,7 @@ export default function Chat() {
   return (
     <ActiveContext.Provider value={{ activeUser, setActiveUser }}>
     <Grid
-      sx={{ background: theme.palette.background.paper, flexGrow: 1 }}
+      sx={{ background: "#fdfdfd", flexGrow: 1 }}
       container
       spacing={2}
     >
@@ -36,7 +36,8 @@ export default function Chat() {
             style={{
               height: "100vh",
               textAlign: "center",
-              background: "#fff",
+              background: "#ffffff",
+
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
