@@ -17,7 +17,7 @@ const activeUsersSlice = createSlice({
             const userIndex = findUserIndex(state.activeUsers, newUser.userId);
             debugger    
             if (userIndex === -1) {
-                state.activeUsers.push({ userInfo: newUser, messages: [], unread: 0, isActive: true });
+                state.activeUsers.push({ userInfo: newUser, messages: [], unread: 0, isActive: true , chatId : ""});
             } else {
                 state.activeUsers[userIndex].isActive = true;
             }
@@ -47,11 +47,10 @@ const activeUsersSlice = createSlice({
                 state.activeUsers.unshift(user);
             }
         },
+
         addSentMessages(state, action: PayloadAction<{ id : string,sender: string; message: string; receiver: string,deliveryStatus : MessageDeliveryStatus,time : string }>) {
-            debugger;
             const { id ,sender, message, receiver,deliveryStatus ,time } = action.payload;
             const userIndex = findUserIndex(state.activeUsers, receiver);
-            debugger    
             if (userIndex !== -1) {
                 const user = state.activeUsers[userIndex];  
                 user.messages.push({
@@ -65,6 +64,7 @@ const activeUsersSlice = createSlice({
                 state.activeUsers.unshift(user);
             }
         },
+
         // this marks all the messages of the user read 
         markAllRead(state,action: PayloadAction<{ sender: string}>) {
             debugger
@@ -79,15 +79,17 @@ const activeUsersSlice = createSlice({
             })
             user.unread = 0;
         },
-        updateMessageStatus(state, action : PayloadAction<{sender : string;receiver : string;messageId : string,messageStatus : MessageDeliveryStatus}>) {
-            const { sender,receiver,messageId,messageStatus } = action.payload;
+        updateMessageStatus(state, action : PayloadAction<{sender : string;receiver : string;messageId : string,chatId : string,messageStatus : MessageDeliveryStatus}>) {
+            const { sender,receiver,messageId,chatId,messageStatus } = action.payload;
             debugger
             const userIndex = findUserIndex(state.activeUsers,sender)
             if ((messageId == "" || messageId == undefined) && messageStatus == MessageDeliveryStatus.READ) {
 
             }
             const messind = findMessageIndex(state.activeUsers[userIndex].messages,messageId)
+            // Updates the messages when the data comes from the ACK
             state.activeUsers[userIndex].messages[messind].status = messageStatus
+            state.activeUsers[userIndex].chatId = chatId;
         }
     }
 });

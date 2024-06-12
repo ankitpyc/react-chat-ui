@@ -14,7 +14,6 @@ import { ActiveUser } from "../../redux-store/interf";
 
 export default function Chat() {
   const theme = useTheme();
-  const messageService = new MessagingService();
   const [activeUser, setActiveUser] = useState<ActiveUser>(null);
   const socketManager:SocketManager = new SocketManager()
   return (
@@ -27,7 +26,7 @@ export default function Chat() {
       <Grid style={{ paddingRight: "0px" }}className={"side-nav-chatbox"}
         xs={2}
       >
-        <ActiveUserList />
+        <ActiveUserList socketManager = {socketManager}  />
       </Grid>
       <Grid style={{ padding: "8px 0px" }} xs={10}>
         {activeUser ? (

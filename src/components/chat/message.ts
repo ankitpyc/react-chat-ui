@@ -8,5 +8,6 @@ export default interface SystemMessage {
     receiverID: string,
     userId: string,
     date: string,
+    chatId? : string,
     MessageStatus : MessageDeliveryStatus
 }

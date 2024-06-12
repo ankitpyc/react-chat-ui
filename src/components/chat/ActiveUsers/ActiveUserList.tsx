@@ -14,19 +14,30 @@ import "../../../App.css";
 import { Divider, Stack } from '@mui/material'; 
 import { RootState } from '../../../redux-store/store';
 import ActiveContext from '../../../redux-store/context/UserContext';
-import { ActiveUser } from '../../../redux-store/interf';
+import { ActiveUser, MessageDeliveryStatus } from '../../../redux-store/interf';
 import { markAllRead } from '../../../redux-store/onlineUsers';
+import { MessagingService } from '../../../service/MessagingService';
+import { SocketManager } from '../../../service/SocketManager';
 
-const ActiveUserList = () => {
+interface SockProps {
+  socketManager : SocketManager
+}
+
+const ActiveUserList : React.FC<SockProps> = ({ socketManager }) =>  {
     const dispatch = useDispatch()
+    const messagingService = new MessagingService()
     const {activeUsers} = useSelector((state : RootState) => state.activeUserReducer)
     const {userName} = useSelector((state : RootState) => state.userReducer)
     const {setActiveUser} = useContext(ActiveContext)
     function UpdateActiveUser(user:ActiveUser) {
+      console.log("Updating active user")
       setActiveUser(user)
       if (user.unread != 0) {
         dispatch(markAllRead({sender : user.userInfo.userId}))
+        var ack = messagingService.CreateAckMessage("",sessionStorage.getItem("ID"),user.userInfo.userId,MessageDeliveryStatus.READ)
+        socketManager.SendMessage(JSON.stringify(ack))
       }
+
     }
     return (
       <Stack sx={{background : '#f8FAFF'}} direction='column'>

@@ -26,7 +26,7 @@ export class ChatManager{
         console.log("sending Message");
         if (message.trim() !== "") {
           var chatMessage: Message;
-          chatMessage = this.messagingService.creatChatMessage(message,this.currUserName,activeUser.userInfo.userId,this.currUser);
+          chatMessage = this.messagingService.creatChatMessage(message,this.currUserName,activeUser.userInfo.userId,this.currUser,activeUser.chatId);
           this.messagingService.AddMessageToStore(chatMessage)
           this.socketManger.SendMessage(JSON.stringify(chatMessage))
         }
@@ -35,6 +35,4 @@ export class ChatManager{
       markAllMessagesRead(activeUser : ActiveUser) {
         this.dispatch(markAllRead({sender : activeUser.userInfo.userId}))
       }
-
-
 }

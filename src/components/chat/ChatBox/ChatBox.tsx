@@ -1,7 +1,7 @@
 import Avatar from "@mui/joy/Avatar";
 import Badge from "@mui/joy/Badge";
 import Box from "@mui/material/Box";
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import React, { useState, useEffect, useContext } from "react";
 import "../../../App.css";
 import { Paper, Stack, Typography } from "@mui/material";
@@ -43,6 +43,7 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
   return (
     <div>
       <Stack
+      className="py-2"
         style={{
           margin: "0 auto",
           display: "flex",

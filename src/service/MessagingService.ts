@@ -5,7 +5,7 @@ import { addActiveUsers, addReceivedMessages, addSentMessages, markAllRead, remo
 
 
 interface MessagingInf {
-    creatChatMessage(text: string,currUserName : string,receiver : string,userId : string): SystemMessage
+    creatChatMessage(text: string,currUserName : string,receiver : string,userId : string,chatId : string): SystemMessage
     createPingMessage(currUserName : string,userId :string): SystemMessage
     handleAndProcessMessageEvent(chatMessage : SystemMessage):SystemMessage
     AddMessageToStore(chatMessage : SystemMessage):void
@@ -16,7 +16,7 @@ interface MessagingInf {
 export class MessagingService implements MessagingInf {
     
     dispatch = useDispatch();
-    
+
     AddMessageToStore(chatMessage : SystemMessage): void {
         this.dispatch(
             addSentMessages({
@@ -48,10 +48,9 @@ export class MessagingService implements MessagingInf {
                     break;
                 }
                  debugger 
-              this.dispatch(updateMessageStatus({sender : chatMessage.userId,receiver : chatMessage.receiverID, messageId : chatMessage.messageId,messageStatus : chatMessage.MessageStatus}))
+              this.dispatch(updateMessageStatus({sender : chatMessage.userId,receiver : chatMessage.receiverID, messageId : chatMessage.messageId,chatId : chatMessage.chatId ,messageStatus : chatMessage.MessageStatus}))
               break;  
             case MessageType.CHAT.toString():
-                debugger
               this.dispatch(
                 addReceivedMessages({
                   id: chatMessage.messageId,
@@ -73,11 +72,12 @@ export class MessagingService implements MessagingInf {
           return null;
     }
 
-    creatChatMessage(text: string,currUserName : string,receiver : string,userId :string): SystemMessage {
+    creatChatMessage(text: string,currUserName : string,receiver : string,userId :string,chatId : string): SystemMessage {
         var chatMessage: SystemMessage = {
             messageType : MessageType.CHAT.toString(),
             userName: currUserName,
             text: text,
+            chatId: chatId,
             receiverID: receiver,
             messageId: crypto.randomUUID(),
             MessageStatus : MessageDeliveryStatus.PUSHED,
