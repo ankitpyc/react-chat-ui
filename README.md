@@ -8,4 +8,6 @@
 
 
 ### Chat Screen
+![image](https://github.com/ankitpyc/react-chat-ui/assets/13076644/48c27c5f-e5e8-4c40-a829-682da9adc3d2)
+
 
