@@ -1,12 +1,30 @@
 .App {
   text-align: center;
   height: 100vh;
+  font-family:  'Mona-Sans-Regular';
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
+
+@font-face {
+  font-family: 'OS-Light' ;
+  src: url('./fonts/OpenSans-Light.ttf');
+}
+
+@font-face {
+  font-family: 'OS-Medium' ;
+  src: url('./fonts/OpenSans-Medium.ttf');
+}
+
+@font-face {
+  font-family: 'OS-Regular' ;
+  src: url('./fonts/OpenSans-Regular.ttf');
+}
+
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -20,6 +38,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: "OS-Regular";
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
@@ -118,12 +137,14 @@
 
 .self-bubble {
   display: flex;
+  font-family: "OS-Regular";
   align-items: self-end;
   flex-direction: row;
   margin: 5px;
 }
 
 .opp-bubble {
+  font-family: "OS-Regular !important";
   display: flex;
   align-items: self-end;
   flex-direction: row-reverse;

@@ -106,6 +106,7 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
                   />
                 )}
               </Stack>
+
               <Paper className={
                   message.sender == currentUser
                     ? "same-bubble-text"
@@ -114,13 +115,14 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
                   <Stack direction={"row"} p={0.5} textAlign={"center"} display={"flex"}>
               <Stack
                 p={1}
+                className="text-nowrap text-ellipsis whitespace-nowrap"
                 pl={1.4}
                 pr={1.6}>
-                <Typography noWrap variant="body2">
+                <Typography style={{"overflow":"hidden","textOverflow" : "ellipsis","whiteSpace" : "nowrap"}} className="text-nowrap text-ellipsis whitespace-nowrap" variant="body2">
                   {message.text}
                 </Typography>
               </Stack>
-              
+                
               <Stack direction={"column"}  alignContent={"flex-end"} alignItems={"flex-end"} justifyContent={'space-between'}>
               <Stack>
                 <span style={{fontSize : '12px'}}>{message.sentTime}</span>

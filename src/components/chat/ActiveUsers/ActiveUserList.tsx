@@ -66,16 +66,18 @@ const ActiveUserList : React.FC<SockProps> = ({ socketManager }) =>  {
         </ListItemAvatar>
         <ListItemText
           primary={user.userInfo.userName}
+          style={{"overflow" : "hidden","whiteSpace" : "nowrap  "}}
           secondary={
             <React.Fragment>
               <Typography
-                sx={{ display: 'inline' }}
-                component="span"
+          style={{ "overflow" : "hidden" ,"textOverflow" : "ellipsis","whiteSpace" : "nowrap"}}
+          component="span"
                 variant="body2"
                 color="text.primary"
               >
+                              {user.messages.length == 0 ? "say Hi 👋 !" : user.messages[user.messages.length-1].sender == sessionStorage.getItem("ID") ? "you : "  + user.messages[user.messages.length-1].text : user.messages[user.messages.length-1].text}
+
               </Typography>
-              {user.messages.length == 0 ? "say Hi 👋 !" : user.messages[user.messages.length-1].sender == sessionStorage.getItem("ID") ? "you : "  + user.messages[user.messages.length-1].text : user.messages[user.messages.length-1].text}
             </React.Fragment>
           }
         />
