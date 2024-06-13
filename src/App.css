@@ -1,7 +1,11 @@
 .App {
   text-align: center;
-  height: 100vh;
+  height: auto;
   font-family:  'Mona-Sans-Regular';
+  overflow: hidden;
+}
+#root {
+  overflow: hidden;
 }
 
 .App-logo {
@@ -156,7 +160,7 @@
   background-color: #ffffff !important;
   color: black !important;
   border-radius: 3px;
-  max-width: 100%;
+  max-width: 45%;
   word-wrap: "break-word";
 }
 
@@ -165,7 +169,7 @@
   background-color: #9C6CE8 !important;
   color: white !important;
   border-radius: 3px;
-  max-width: 70%;
+  max-width: 45%;
   word-wrap: "break-word";
 }
 
@@ -200,4 +204,15 @@
 
 .hoverOnListItems:hover {
   background-color: rgb(252, 146, 146);
+}
+
+.messageBox{
+  margin-bottom: 0px;
+  margin-top: 100%;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 2%;
+  width: 80%;
 }

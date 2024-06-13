@@ -79,7 +79,7 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
             <VideoCallIcon sx={{backgroundColor : '#dc67bf'}} className="icons"></VideoCallIcon>
           </Stack>
         </Stack>
-        <div style={{ flexGrow: 1, marginTop: 12 }}>
+        <Stack className="overflow-y-auto overflow-x-hidden"  style={{ flexGrow: 1 }}>
           {
           currentUsers[0].messages.map((message : UserMessage, index: number) => (
             <Stack
@@ -118,7 +118,7 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
                 className="text-nowrap text-ellipsis whitespace-nowrap"
                 pl={1.4}
                 pr={1.6}>
-                <Typography style={{"overflow":"hidden","textOverflow" : "ellipsis","whiteSpace" : "nowrap"}} className="text-nowrap text-ellipsis whitespace-nowrap" variant="body2">
+                <Typography style={{"textWrap": "wrap","textAlign": "justify"}} className=" text-ellipsis whitespace-nowrap " variant="body2">
                   {message.text}
                 </Typography>
               </Stack>
@@ -144,9 +144,8 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
               </Paper>
             </Stack>
           ))}
-        </div>
-        <div
-          style={{ display: "flex", margin: "4% 10px", alignItems: "center" }}
+             <div
+          className="messageBox"
         >
           <input
             type="text"
@@ -175,6 +174,8 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
             <SendIcon></SendIcon>
           </button>
         </div>
+        </Stack>
+     
       </Stack>
     </div>
   );
