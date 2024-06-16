@@ -41,7 +41,6 @@ export class SocketManager implements SocketInf{
 
     onConnect(): void {
         console.log("Initiating websocket connection");
-        debugger
         var ping = this.messageService.createPingMessage(this.currUserName,this.currUserId);
         console.log(JSON.stringify(ping));
         this.sock.send(JSON.stringify(ping));

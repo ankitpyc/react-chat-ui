@@ -15,7 +15,6 @@ export class UserSession implements SessionInf {
         sessionStorage.removeItem(key)
     }
     SetSessionVariables(sessionVariables: { [key: string]: any }): void {
-        debugger
         var user = sessionVariables["user"]
         sessionStorage.setItem("token",sessionVariables["token"])
         sessionStorage.setItem("ID",user["ID"])

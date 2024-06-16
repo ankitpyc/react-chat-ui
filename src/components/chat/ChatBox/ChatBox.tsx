@@ -22,7 +22,6 @@ interface SockProps {
 }
 
 export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
-  debugger
   const {activeUser} = useContext(ActiveContext)
   const [newMessage, setNewMessage] = useState("");
   const currentUser = sessionStorage.getItem("ID");
@@ -34,7 +33,6 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
   ) 
     
   const sendMessage = () => {
-    debugger
     chatService.sendMessage(newMessage,activeUser)
     setNewMessage("");
   };

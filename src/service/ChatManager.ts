@@ -14,7 +14,6 @@ export class ChatManager{
     currUserName : string
 
     constructor(sm : SocketManager) {
-        debugger
         this.socketManger = sm
         this.messagingService = new MessagingService()
         this.currUser = sessionStorage.getItem("ID")
@@ -22,7 +21,6 @@ export class ChatManager{
     }
     
     sendMessage = (message: string,activeUser : ActiveUser) => {
-        debugger
         console.log("sending Message");
         if (message.trim() !== "") {
           var chatMessage: Message;

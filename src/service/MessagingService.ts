@@ -43,11 +43,11 @@ export class MessagingService implements MessagingInf {
               break;
             case MessageType.ACK.toString() :
               debugger
+              console.log("chat id recieved is ",chatMessage.chatId)
                 if(chatMessage.MessageStatus == MessageDeliveryStatus.READ){
                     this.dispatch(markAllRead({sender : chatMessage.userId}))
                     break;
                 }
-                 debugger 
               this.dispatch(updateMessageStatus({sender : chatMessage.userId,receiver : chatMessage.receiverID, messageId : chatMessage.messageId,chatId : chatMessage.chatId ,messageStatus : chatMessage.MessageStatus}))
               break;  
             case MessageType.CHAT.toString():
@@ -73,7 +73,13 @@ export class MessagingService implements MessagingInf {
     }
 
     creatChatMessage(text: string,currUserName : string,receiver : string,userId :string,chatId : string): SystemMessage {
-        var chatMessage: SystemMessage = {
+      // this is the default chat id which gets sent
+      // when initially a message is sent 
+      if(chatId === ""){
+        chatId = "0";
+      }
+      
+      var chatMessage: SystemMessage = {
             messageType : MessageType.CHAT.toString(),
             userName: currUserName,
             text: text,
@@ -84,6 +90,7 @@ export class MessagingService implements MessagingInf {
             userId: userId,
             date: Date.now().toString(),
           };
+          console.log("Sending message",chatMessage)
           return chatMessage;
     }
 
@@ -101,7 +108,7 @@ export class MessagingService implements MessagingInf {
           return chatMessage;
         }
         
-        CreateAckMessage(messageId:string,userId : string,receiverID : string,status : MessageDeliveryStatus): SystemMessage {
+    CreateAckMessage(messageId:string,userId : string,receiverID : string,status : MessageDeliveryStatus): SystemMessage {
             var chatMessage: SystemMessage = {
                 messageType:MessageType.ACK.toString(),
                 userName: "",

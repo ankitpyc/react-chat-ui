@@ -32,7 +32,7 @@ export interface ActiveUser {
     messages: UserMessage[];
     unread: number;
     isActive?: boolean;
-    chatId? : string
+    chatId? : string 
 }
 
 export interface ActiveUsersState {

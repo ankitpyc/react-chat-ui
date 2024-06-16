@@ -15,7 +15,6 @@ const activeUsersSlice = createSlice({
         addActiveUsers(state, action: PayloadAction<{ newUser: UserInfo }>) {
             const { newUser } = action.payload;
             const userIndex = findUserIndex(state.activeUsers, newUser.userId);
-            debugger    
             if (userIndex === -1) {
                 state.activeUsers.push({ userInfo: newUser, messages: [], unread: 0, isActive: true , chatId : ""});
             } else {
@@ -33,7 +32,6 @@ const activeUsersSlice = createSlice({
             }
         },
         addReceivedMessages(state, action: PayloadAction<{id : string ,sender: string; message: string; receiver: string , deliveryStatus : MessageDeliveryStatus,time : string }>) {
-            debugger
             const { id ,sender, message, receiver, time } = action.payload;
             const userIndex = findUserIndex(state.activeUsers, sender);
 
@@ -67,7 +65,6 @@ const activeUsersSlice = createSlice({
 
         // this marks all the messages of the user read 
         markAllRead(state,action: PayloadAction<{ sender: string}>) {
-            debugger
             const { sender } = action.payload;
             const userIndex = findUserIndex(state.activeUsers,sender)
             const user = state.activeUsers[userIndex];
@@ -76,7 +73,7 @@ const activeUsersSlice = createSlice({
                 if(message.status !== MessageDeliveryStatus.READ){
                     message.status = MessageDeliveryStatus.READ
                 }
-            })
+            })  
             user.unread = 0;
         },
         updateMessageStatus(state, action : PayloadAction<{sender : string;receiver : string;messageId : string,chatId : string,messageStatus : MessageDeliveryStatus}>) {
