@@ -5,7 +5,6 @@ import SystemMessage from "../components/chat/message";
 interface SocketInf{
     onConnect():void
     onMessage(data:Event):void
-    RegisterSocketEvents():void
     onClose():void
     GetSocket():WebSocket
     SendMessage(data:string):void
@@ -41,13 +40,8 @@ export class SocketManager implements SocketInf{
         setTimeout(()=> this.initWebsock(),1000)
     }
 }
-
-    RegisterSocketEvents(): void {
-        throw new Error("Method not implemented.");
-    }
-
     OnError() : void {
-        console.log("Error connecting to websockets , reattempting ....")
+        console.log(new Date() + "Error connecting to websockets , closing connection and reattempting ....")
     }
 
     onConnect(): void {
