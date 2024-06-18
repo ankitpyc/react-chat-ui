@@ -1,11 +1,7 @@
-import { Socket, io } from "socket.io-client"
 import { MessagingService } from "./MessagingService"
-import { socket } from "../components/util/socket/socket";
 import { useDispatch } from "react-redux";
 import { setUserOffline } from "../redux-store/userSlice";
 import SystemMessage from "../components/chat/message";
-import { DefaultEventsMap } from "@socket.io/component-emitter";
-
 interface SocketInf{
     onConnect():void
     onMessage(data:Event):void
@@ -30,13 +26,28 @@ export class SocketManager implements SocketInf{
     
     constructor(){
         this.messageService = new MessagingService()
-        this.sock = new WebSocket("ws://localhost:2023/ws")
-        this.sock.onmessage = this.onMessage.bind(this)
-        this.sock.onopen = this.onConnect.bind(this)
-        this.sock.onclose = this.onClose.bind(this)
+        this.initWebsock();
     }
+
+    private initWebsock() {
+        try {
+        this.sock = new WebSocket("ws://localhost:2023/ws")
+        this.sock.onmessage = this.onMessage.bind(this);
+        this.sock.onopen = this.onConnect.bind(this);
+        this.sock.onerror = this.OnError.bind(this);
+        this.sock.onclose = this.onClose.bind(this)
+    } catch (error) {
+        console.error("recieved error : ",error)
+        setTimeout(()=> this.initWebsock(),1000)
+    }
+}
+
     RegisterSocketEvents(): void {
         throw new Error("Method not implemented.");
+    }
+
+    OnError() : void {
+        console.log("Error connecting to websockets , reattempting ....")
     }
 
     onConnect(): void {
@@ -61,8 +72,7 @@ export class SocketManager implements SocketInf{
 
     onClose(): void {
         console.log("Closing connection .. ") 
-        this.dispatch(setUserOffline({ isActive: false }));    
+        this.dispatch(setUserOffline({ isActive: false })); 
+        setTimeout(()=> this.initWebsock(),10000)
     }
-
-
 }
