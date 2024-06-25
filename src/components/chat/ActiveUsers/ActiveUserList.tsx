@@ -27,7 +27,6 @@ const ActiveUserList : React.FC<SockProps> = ({ socketManager }) =>  {
     const dispatch = useDispatch()
     const messagingService = new MessagingService()
     const {activeUsers} = useSelector((state : RootState) => state.activeUserReducer)
-    debugger
     const {userName} = useSelector((state : RootState) => state.userReducer)
     const {setActiveUser} = useContext(ActiveContext)
     function UpdateActiveUser(user:ActiveUser) {

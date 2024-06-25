@@ -6,7 +6,8 @@ export function  populateMessages(resp : UserChatResponse) : ActiveUser []  {
     var chats:ActiveUser[] = []
      
     resp.history.forEach(chat => {
-    var otherUserId:string = resp.userid.toString() === chat.userID1 ? chat.userID2 : chat.userID2
+        debugger
+    var otherUserId:string = resp.userid.toString() === chat.userID1 ? chat.userID2 : chat.userID1
     var otherUserDetails = resp.userid.toString() === chat.userID1 ? chat.user2Details : chat.user1Details 
     var userInfo : UserInfo = {
         "userId" : otherUserId,

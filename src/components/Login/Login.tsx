@@ -9,13 +9,12 @@ import {
   Alert,
   Button,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
 import CircularIndeterminate from "../util/LoadingIcon";
 import { LoginError, UserDetails } from "./LoginError";
 import { UserSession } from "../../utils/sessionStore";
 import { useAxios } from "../../utils/axiosInterceptor";
-import {  fetchUserById } from "../../redux-store/onlineUsers";
 import { useAppDispatch } from "../../redux-store/hooks";
+import { fetchUserChats } from "../../redux-store/thunk/thunkActions";
 
 const Login = () => {
   const theme = useTheme();
@@ -47,7 +46,7 @@ const Login = () => {
         .then((response) => {
           debugger
           sessionService.SetSessionVariables(response.data);
-          dispatch(fetchUserById(4))
+          dispatch(fetchUserChats(Number(sessionStorage.getItem("ID"))))
           navigate("/chat");
         })
         .catch((error) => {

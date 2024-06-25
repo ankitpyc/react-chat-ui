@@ -1,17 +1,25 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
+import { UserChatResponse } from "../../dto/UserChatResponse"
 
-const fetchUserById = createAsyncThunk(
-    'users/fetchUserChats',
-    async (userId: number, thunkAPI) => {
-      var data : any = {"ID" : userId}
-      await axios.post("http://localhost:3023/api/LoadUserChats",data)
-      .then(response => {
-        console.log(data)
-        return response.data
-      })
-      .catch(err => {
-        console.error(err)
-      })
-    },
-  )
+
+function getUserData(id : number) {
+  var data : UserData  = {"ID" : id}
+  data.ID = id
+  return data
+}
+
+interface UserData {
+  ID: number;
+}
+
+export const fetchUserChats = createAsyncThunk(
+  'users/FetchUserDetails',
+  async (userId: number) => {  
+      console.log("fetching user details")
+      const postdata = getUserData(userId)
+      debugger
+      const response = await axios.post<UserChatResponse>("http://localhost:3023/api/LoadUserChats",postdata)
+      return response.data
+  },
+)

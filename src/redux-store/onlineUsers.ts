@@ -1,43 +1,20 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ActiveUser, ActiveUsersState, MessageDeliveryStatus, UserInfo, UserMessage } from './interf';
-import { useAxios } from '../utils/axiosInterceptor';
-import axios from 'axios';
-import { UserChatResponse } from '../dto/UserChatResponse';
 import { populateMessages } from '../utils/chatResponseAdapter';
+import { fetchUserChats } from './thunk/thunkActions';
 
 const findUserIndex = (users: ActiveUser[], userId: string): number => 
     users.findIndex(user => user.userInfo.userId === userId);
 
-const findMessageIndex = (messages: UserMessage[], messageId: string): number => 
-    messages.findIndex(message => message.id === messageId);    
+const findMessageIndex = (messages: UserMessage[], messageId: string): number => messages.findIndex(message => message.id === messageId);    
 const initialState: ActiveUsersState = { activeUsers: [] };
-
-interface UserData {
-    ID: number;
-}
-
-function getUserData(id : number) {
-    var data : UserData  = {"ID" : id}
-    data.ID = id
-    return data
-}
-
-export const fetchUserById = createAsyncThunk(
-    'users/FetchUserDetails',
-    async (userId: number) => {  
-        console.log("fetching user details")
-        const postdata = getUserData(userId)
-        debugger
-        const response = await axios.post<UserChatResponse>("http://localhost:3023/api/LoadUserChats",postdata)
-        return response.data
-    },
-  )
 
 const activeUsersSlice = createSlice({
     name: 'activeUserDetail',
     initialState,
     reducers: {
         addActiveUsers(state, action: PayloadAction<{ newUser: UserInfo }>) {
+            debugger
             const { newUser } = action.payload;
             const userIndex = findUserIndex(state.activeUsers, newUser.userId);
             if (userIndex === -1) {
@@ -110,20 +87,19 @@ const activeUsersSlice = createSlice({
             state.activeUsers[userIndex].messages[messind].status = messageStatus
             state.activeUsers[userIndex].chatId = chatId;
         }
-    }, extraReducers: (builder) => {
+    }, 
+    extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
-        builder.addCase(fetchUserById.fulfilled, (state, action) => {
+        builder.addCase(fetchUserChats.fulfilled, (state, action) => {
           // Add user to the state array
-          console.log("fullfilled query")
-          debugger
           var messages:ActiveUser[] = populateMessages(action.payload)
           messages.forEach(chat => {
             state.activeUsers.push(chat)
           })
-        }).addCase(fetchUserById.rejected,(state,action) => {
+        }).addCase(fetchUserChats.rejected,(state,action) => {
             console.error("failed fetching chats from server : ",action.error.message)
         })
-      },
+    },
 });
 
 export const { addActiveUsers, removeInactiveUsers, addSentMessages, addReceivedMessages, markAllRead,updateMessageStatus} = activeUsersSlice.actions;
