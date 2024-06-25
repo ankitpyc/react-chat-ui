@@ -14,10 +14,13 @@ import CircularIndeterminate from "../util/LoadingIcon";
 import { LoginError, UserDetails } from "./LoginError";
 import { UserSession } from "../../utils/sessionStore";
 import { useAxios } from "../../utils/axiosInterceptor";
+import {  fetchUserById } from "../../redux-store/onlineUsers";
+import { useAppDispatch } from "../../redux-store/hooks";
 
 const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const axiosInstance = useAxios();
   const sessionService = new UserSession();
   const [loading, setLoading] = useState(false);
@@ -42,7 +45,9 @@ const Login = () => {
       axiosInstance
         .post("http://localhost:3023/LoginUser", { email, password })
         .then((response) => {
+          debugger
           sessionService.SetSessionVariables(response.data);
+          dispatch(fetchUserById(4))
           navigate("/chat");
         })
         .catch((error) => {

@@ -22,6 +22,7 @@ const userSlice = createSlice({
     setUserOffline(state, action) {
       state["isActive"] = action.payload.isActive;
     },
+    
   },
 });
 

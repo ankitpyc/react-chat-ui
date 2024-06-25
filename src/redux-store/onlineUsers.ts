@@ -1,5 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ActiveUser, ActiveUsersState, MessageDeliveryStatus, UserInfo, UserMessage } from './interf';
+import { useAxios } from '../utils/axiosInterceptor';
+import axios from 'axios';
+import { UserChatResponse } from '../dto/UserChatResponse';
+import { populateMessages } from '../utils/chatResponseAdapter';
 
 const findUserIndex = (users: ActiveUser[], userId: string): number => 
     users.findIndex(user => user.userInfo.userId === userId);
@@ -7,6 +11,27 @@ const findUserIndex = (users: ActiveUser[], userId: string): number =>
 const findMessageIndex = (messages: UserMessage[], messageId: string): number => 
     messages.findIndex(message => message.id === messageId);    
 const initialState: ActiveUsersState = { activeUsers: [] };
+
+interface UserData {
+    ID: number;
+}
+
+function getUserData(id : number) {
+    var data : UserData  = {"ID" : id}
+    data.ID = id
+    return data
+}
+
+export const fetchUserById = createAsyncThunk(
+    'users/FetchUserDetails',
+    async (userId: number) => {  
+        console.log("fetching user details")
+        const postdata = getUserData(userId)
+        debugger
+        const response = await axios.post<UserChatResponse>("http://localhost:3023/api/LoadUserChats",postdata)
+        return response.data
+    },
+  )
 
 const activeUsersSlice = createSlice({
     name: 'activeUserDetail',
@@ -21,7 +46,6 @@ const activeUsersSlice = createSlice({
                 state.activeUsers[userIndex].isActive = true;
             }
         },
-
         //TODO :: Dont remove this from the array , keep it inactive
         removeInactiveUsers(state, action: PayloadAction<{ userId: string }>) {
             const { userId } = action.payload;
@@ -45,7 +69,6 @@ const activeUsersSlice = createSlice({
                 state.activeUsers.unshift(user);
             }
         },
-
         addSentMessages(state, action: PayloadAction<{ id : string,sender: string; message: string; receiver: string,deliveryStatus : MessageDeliveryStatus,time : string }>) {
             const { id ,sender, message, receiver,deliveryStatus ,time } = action.payload;
             const userIndex = findUserIndex(state.activeUsers, receiver);
@@ -62,7 +85,6 @@ const activeUsersSlice = createSlice({
                 state.activeUsers.unshift(user);
             }
         },
-
         // this marks all the messages of the user read 
         markAllRead(state,action: PayloadAction<{ sender: string}>) {
             const { sender } = action.payload;
@@ -88,7 +110,20 @@ const activeUsersSlice = createSlice({
             state.activeUsers[userIndex].messages[messind].status = messageStatus
             state.activeUsers[userIndex].chatId = chatId;
         }
-    }
+    }, extraReducers: (builder) => {
+        // Add reducers for additional action types here, and handle loading state as needed
+        builder.addCase(fetchUserById.fulfilled, (state, action) => {
+          // Add user to the state array
+          console.log("fullfilled query")
+          debugger
+          var messages:ActiveUser[] = populateMessages(action.payload)
+          messages.forEach(chat => {
+            state.activeUsers.push(chat)
+          })
+        }).addCase(fetchUserById.rejected,(state,action) => {
+            console.error("failed fetching chats from server : ",action.error.message)
+        })
+      },
 });
 
 export const { addActiveUsers, removeInactiveUsers, addSentMessages, addReceivedMessages, markAllRead,updateMessageStatus} = activeUsersSlice.actions;

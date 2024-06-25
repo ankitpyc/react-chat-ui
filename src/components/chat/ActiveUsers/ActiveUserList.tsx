@@ -27,10 +27,10 @@ const ActiveUserList : React.FC<SockProps> = ({ socketManager }) =>  {
     const dispatch = useDispatch()
     const messagingService = new MessagingService()
     const {activeUsers} = useSelector((state : RootState) => state.activeUserReducer)
+    debugger
     const {userName} = useSelector((state : RootState) => state.userReducer)
     const {setActiveUser} = useContext(ActiveContext)
     function UpdateActiveUser(user:ActiveUser) {
-      console.log("Updating active user")
       setActiveUser(user)
       if (user.unread != 0) {
         dispatch(markAllRead({sender : user.userInfo.userId}))
@@ -51,7 +51,7 @@ const ActiveUserList : React.FC<SockProps> = ({ socketManager }) =>  {
         <Divider/>
         <Stack>
         <List sx={{ width: '100%', bgcolor: 'background.paper' }} aria-labelledby="ellipsis-list-demo">
-            {activeUsers.filter(user => user.isActive == true).map((user, index) => (
+            {activeUsers.map((user, index) => (
               <Stack>
       <ListItem  alignItems="flex-start">
       <ListItemButton className='hoverOnListItems'  onClick={() => UpdateActiveUser(user)}>
