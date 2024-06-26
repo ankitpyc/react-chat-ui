@@ -1,7 +1,7 @@
 import Avatar from "@mui/joy/Avatar";
 import Badge from "@mui/joy/Badge";
 import Box from "@mui/material/Box";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import React, { useState, useEffect, useContext } from "react";
 import "../../../App.css";
 import { Paper, Stack, Typography } from "@mui/material";
@@ -31,7 +31,6 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
   const currentUsers = activeUsers.filter((user: ActiveUser) => 
     user.userInfo.userId == activeUser.userInfo.userId
   ) 
-    
   const sendMessage = () => {
     chatService.sendMessage(newMessage,activeUser)
     setNewMessage("");

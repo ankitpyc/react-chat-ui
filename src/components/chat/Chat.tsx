@@ -4,18 +4,21 @@ import { useDispatch, useSelector } from "react-redux";
 import "../../App.css";
 import {ChatBox} from "./ChatBox/ChatBox";
 import ActiveUserList from "./ActiveUsers/ActiveUserList";
-import { useTheme } from "@mui/material";
-import { MessagingService } from "../../service/MessagingService";
 import { SocketManager } from "../../service/SocketManager";
 import ActiveContext from "../../redux-store/context/UserContext";
 import { ActiveUser } from "../../redux-store/interf";
-
-
+import { useAppDispatch } from "../../redux-store/hooks";
+import { fetchUserChats } from "../../redux-store/thunk/thunkActions";
 
 export default function Chat() {
-  const theme = useTheme();
   const [activeUser, setActiveUser] = useState<ActiveUser>(null);
+  const dispatch = useAppDispatch()
   const socketManager:SocketManager = new SocketManager()
+  useEffect(() => {
+    console.log("loading user chats .... ");
+    dispatch(fetchUserChats(Number(sessionStorage.getItem("ID"))));
+  },[]);
+    
   return (
     <ActiveContext.Provider value={{ activeUser, setActiveUser }}>
     <Grid
@@ -37,7 +40,6 @@ export default function Chat() {
               height: "100vh",
               textAlign: "center",
               background: "#ffffff",
-
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",

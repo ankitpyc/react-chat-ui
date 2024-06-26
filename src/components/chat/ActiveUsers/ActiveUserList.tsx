@@ -11,7 +11,7 @@ import Badge from '@mui/joy/Badge';
 import {useDispatch, useSelector} from 'react-redux';
 import { faker } from '@faker-js/faker';
 import "../../../App.css";
-import { Divider, Stack } from '@mui/material'; 
+import { Divider, Skeleton, Stack } from '@mui/material'; 
 import { RootState } from '../../../redux-store/store';
 import ActiveContext from '../../../redux-store/context/UserContext';
 import { ActiveUser, MessageDeliveryStatus } from '../../../redux-store/interf';
@@ -26,7 +26,7 @@ interface SockProps {
 const ActiveUserList : React.FC<SockProps> = ({ socketManager }) =>  {
     const dispatch = useDispatch()
     const messagingService = new MessagingService()
-    const {activeUsers} = useSelector((state : RootState) => state.activeUserReducer)
+    const {activeUsers,isLoading} = useSelector((state : RootState) => state.activeUserReducer)
     const {userName} = useSelector((state : RootState) => state.userReducer)
     const {setActiveUser} = useContext(ActiveContext)
     function UpdateActiveUser(user:ActiveUser) {
@@ -49,8 +49,10 @@ const ActiveUserList : React.FC<SockProps> = ({ socketManager }) =>  {
         <Stack p={2}><Typography variant="h6">Chats</Typography></Stack>
         <Divider/>
         <Stack>
+          
         <List sx={{ width: '100%', bgcolor: 'background.paper' }} aria-labelledby="ellipsis-list-demo">
-            {activeUsers.map((user, index) => (
+          {isLoading === false ? (
+            activeUsers.map((user, index) => (
               <Stack>
       <ListItem  alignItems="flex-start">
       <ListItemButton className='hoverOnListItems'  onClick={() => UpdateActiveUser(user)}>
@@ -85,7 +87,11 @@ const ActiveUserList : React.FC<SockProps> = ({ socketManager }) =>  {
       </ListItem>
       <Divider variant="inset" component="li" /></Stack>
         ))
-        }
+          ) : (
+<Skeleton variant="rectangular" width={210} height={60} />
+          ) 
+          }
+        
       </List>
       </Stack>
       </Stack>

@@ -37,5 +37,6 @@ export interface ActiveUser {
 
 export interface ActiveUsersState {
     activeUsers: ActiveUser[];
+    isLoading : boolean
 }
 
