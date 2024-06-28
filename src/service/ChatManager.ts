@@ -1,7 +1,7 @@
 import { MessagingService } from "./MessagingService";
 import { SocketManager } from "./SocketManager";
 import Message from "../components/chat/message";
-import { ActiveUser } from "../redux-store/interf";
+import { ActiveUser } from "../dto/interface";
 import { useDispatch } from "react-redux";
 import { markAllRead } from "../redux-store/onlineUsers";
 

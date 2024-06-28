@@ -1,4 +1,4 @@
-import { MessageDeliveryStatus,MessageType} from "../../redux-store/interf";
+import { MessageDeliveryStatus,MessageType} from "../../dto/interface";
 
 export default interface SystemMessage {
     messageType: string,

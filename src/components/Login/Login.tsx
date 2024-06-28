@@ -10,10 +10,9 @@ import {
   Button,
 } from "@mui/material";
 import CircularIndeterminate from "../util/LoadingIcon";
-import { LoginError, UserDetails } from "./LoginError";
+import { LoginError, UserDetails } from "../login/LoginError";
 import { UserSession } from "../../utils/sessionStore";
 import { useAxios } from "../../utils/axiosInterceptor";
-import { useAppDispatch } from "../../redux-store/hooks";
 
 const Login = () => {
   const theme = useTheme();
@@ -47,11 +46,16 @@ const Login = () => {
         })
         .catch((error) => {
           if (error.code == "ERR_NETWORK") {
-            console.error("ERR_NETWORK");
-            throw error;
-          }
+            console.log(error);
+            setAlert({ showAlert: true, message: error.message }); 
+            setLoading(false);
+          } else {
           setAlert({ showAlert: true, message: error.response.data.error });
           setLoading(false);
+          }
+          setTimeout(()=>{
+            setAlert({ showAlert: false, message: "" }); 
+          },5000)
         });
     } else {
       setLoading(false);

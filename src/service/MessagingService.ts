@@ -1,7 +1,8 @@
 import SystemMessage from "../components/chat/message";
-import { MessageDeliveryStatus, MessageType } from "../redux-store/interf";
+import { MessageDeliveryStatus, MessageType } from "../dto/interface";
 import { useDispatch } from "react-redux";
 import { addActiveUsers, addReceivedMessages, addSentMessages, markAllRead, removeInactiveUsers, updateMessageStatus } from "../redux-store/onlineUsers";
+import { FormatDateTime } from "../utils/DateTimeFormatter";
 
 
 interface MessagingInf {
@@ -25,7 +26,7 @@ export class MessagingService implements MessagingInf {
               sender: chatMessage.userId,
               message: chatMessage.text,
               deliveryStatus : MessageDeliveryStatus.PUSHED,
-              time : formatDateTime(new Date().toString())
+              time : FormatDateTime(new Date().toString())
             })
           );    
     }
@@ -56,7 +57,7 @@ export class MessagingService implements MessagingInf {
                   sender: chatMessage.userId,
                   message: chatMessage.text,
                   deliveryStatus: chatMessage.MessageStatus,
-                  time: formatDateTime(chatMessage.date),
+                  time: FormatDateTime(chatMessage.date),
                 })
               );
               if (chatMessage.messageType !== MessageType.ACK) {
@@ -121,11 +122,5 @@ export class MessagingService implements MessagingInf {
         }
     }
 
-function formatDateTime(date: string): string {
-    const d = new Date('Sun Jun 09 2024 14:22:52 GMT+0530 (India Standard Time)');
-    const hours = d.getHours().toString().padStart(2, '0');
-    const minutes = d.getMinutes().toString().padStart(2, '0');
-    const formattedTime = `${hours}:${minutes}`;
-    return formattedTime
-}
+
 

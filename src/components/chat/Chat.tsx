@@ -1,18 +1,19 @@
 import React, { useState, useEffect, createContext } from "react";
 import Grid from "@mui/joy/Grid";
-import { useDispatch, useSelector } from "react-redux";
 import "../../App.css";
 import {ChatBox} from "./ChatBox/ChatBox";
 import ActiveUserList from "./ActiveUsers/ActiveUserList";
 import { SocketManager } from "../../service/SocketManager";
-import ActiveContext from "../../redux-store/context/UserContext";
-import { ActiveUser } from "../../redux-store/interf";
-import { useAppDispatch } from "../../redux-store/hooks";
+import ActiveContext from "../../context/UserContext";
+import { ActiveUser } from "../../dto/interface";
+import { useAppDispatch } from "../../hooks/hooks";
 import { fetchUserChats } from "../../redux-store/thunk/thunkActions";
 
 export default function Chat() {
   const [activeUser, setActiveUser] = useState<ActiveUser>(null);
   const dispatch = useAppDispatch()
+  const currentUser = sessionStorage.getItem("ID")
+  const currUserName = sessionStorage.getItem("userName")
   const socketManager:SocketManager = new SocketManager()
   useEffect(() => {
     console.log("loading user chats .... ");
@@ -20,7 +21,7 @@ export default function Chat() {
   },[]);
     
   return (
-    <ActiveContext.Provider value={{ activeUser, setActiveUser }}>
+    <ActiveContext.Provider value={{ activeUser, setActiveUser , currentUser,currUserName }}>
     <Grid
       sx={{ background: "#fdfdfd", flexGrow: 1 }}
       container

@@ -3,9 +3,9 @@ import {Routes , Route,Link} from "react-router-dom"
 import "./App.css";
 import Chat from './components/chat/Chat';
 import {AxiosProvider} from './utils/axiosInterceptor'
-import Login from './components/Login/Login';
-import NotFound from './components/NotFound/NotFound';
-import Register from './components/Register/Register';
+import Login from './components/login/Login';
+import NotFound from './components/notfound/NotFound';
+import Register from './components/register/Register';
 
 const App = () => {
   return (

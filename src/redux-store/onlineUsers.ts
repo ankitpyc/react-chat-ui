@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ActiveUser, ActiveUsersState, MessageDeliveryStatus, UserInfo, UserMessage } from './interf';
-import { populateMessages } from '../utils/chatResponseAdapter';
+import { ActiveUser, ActiveUsersState, MessageDeliveryStatus, UserInfo, UserMessage } from '../dto/interface';
+import { populateMessages } from '../dto/chatResponseAdapter';
 import { fetchUserChats } from './thunk/thunkActions';
 
 const findUserIndex = (users: ActiveUser[], userId: string): number => 
@@ -15,9 +15,10 @@ const activeUsersSlice = createSlice({
     reducers: {
         addActiveUsers(state, action: PayloadAction<{ newUser: UserInfo }>) {
             const { newUser } = action.payload;
+            debugger
             const userIndex = findUserIndex(state.activeUsers, newUser.userId);
             if (userIndex === -1) {
-                state.activeUsers.push({ userInfo: newUser, messages: [], unread: 0, isActive: true , chatId : ""});
+                // state.activeUsers.push({ userInfo: newUser, messages: [], unread: 0, isActive: true , chatId : ""});
             } else {
                 state.activeUsers[userIndex].isActive = true;
             }
@@ -85,21 +86,21 @@ const activeUsersSlice = createSlice({
             state.activeUsers[userIndex].messages[messind].status = messageStatus
             state.activeUsers[userIndex].chatId = chatId;
         }
-    }, 
-    extraReducers: (builder) => {
-            // Add reducers for additional action types here, and handle loading state as needed
-            builder.addCase(fetchUserChats.fulfilled, (state, action) => {
-            // Add user to the state array
-            debugger
-            var messages:ActiveUser[] = populateMessages(action.payload)
-            state.activeUsers.push(...messages)
-            state.isLoading = false
-            }).addCase(fetchUserChats.pending , (state,action) => {
-                state.isLoading = true
-            }).addCase(fetchUserChats.rejected,(state,action) => {
-                console.error("failed fetching chats from server : ",action.error.message)
-            })
-        },
+     }, 
+        extraReducers: (builder) => {
+                // Add reducers for additional action types here, and handle loading state as needed
+                builder.addCase(fetchUserChats.fulfilled, (state, action) => {
+                // Add user to the state array
+                debugger
+                var messages:ActiveUser[] = populateMessages(action.payload)
+                state.activeUsers.push(...messages)
+                state.isLoading = false
+                }).addCase(fetchUserChats.pending , (state,action) => {
+                    state.isLoading = true
+                }).addCase(fetchUserChats.rejected,(state,action) => {
+                    console.error("failed fetching chats from server : ",action.error.message)
+                })
+         },
 });
 
 export const { addActiveUsers, removeInactiveUsers, addSentMessages, addReceivedMessages, markAllRead,updateMessageStatus} = activeUsersSlice.actions;

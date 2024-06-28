@@ -1,5 +1,6 @@
-import { History, Message, UserChatResponse } from "../dto/UserChatResponse";
-import { ActiveUser, MessageDeliveryStatus, UserInfo, UserMessage } from "../redux-store/interf";
+import { FormatDateTime } from "../utils/DateTimeFormatter";
+import { History, Message, UserChatResponse } from "./UserChatResponse";
+import { ActiveUser, MessageDeliveryStatus, UserInfo, UserMessage } from "./interface";
 
 export function  populateMessages(resp : UserChatResponse) : ActiveUser []  {
     
@@ -34,7 +35,7 @@ function mapMessage( messages : Message[]): UserMessage[] {
             "sender" : m.senderId,
             "receiver" : m.receiverId,
             "status" : MessageDeliveryStatus.DELIVERED,
-            "sentTime" : m.CreatedAt
+            "sentTime" : FormatDateTime(m.CreatedAt)
         }
         usrMessage.push(userMessage)
     })

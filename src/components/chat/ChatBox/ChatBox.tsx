@@ -12,8 +12,8 @@ import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
 import CheckIcon from '@mui/icons-material/Check';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import VideoCallIcon from "@mui/icons-material/VideoCall";
-import { ActiveUser, MessageDeliveryStatus, UserMessage } from "../../../redux-store/interf";
-import ActiveContext from "../../../redux-store/context/UserContext";
+import { ActiveUser, MessageDeliveryStatus, UserMessage } from "../../../dto/interface";
+import ActiveContext from "../../../context/UserContext";
 import { ChatManager } from "../../../service/ChatManager";
 import { SocketManager } from "../../../service/SocketManager";
 

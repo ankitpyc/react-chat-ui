@@ -18,6 +18,7 @@ export const fetchUserChats = createAsyncThunk(
   async (userId: number) => {  
       console.log("fetching user details")
       const postdata = getUserData(userId)
+      //TODO : we need to use axios instance instead of axios .
       const response = await axios.post<UserChatResponse>("http://localhost:3023/api/LoadUserChats",postdata)
       return response.data
   },
