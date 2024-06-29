@@ -8,6 +8,7 @@ import ActiveContext from "../../context/UserContext";
 import { ActiveUser } from "../../dto/interface";
 import { useAppDispatch } from "../../hooks/hooks";
 import { fetchUserChats } from "../../redux-store/thunk/thunkActions";
+import { Drawer } from "@mui/material";
 
 export default function Chat() {
   const [activeUser, setActiveUser] = useState<ActiveUser>(null);
@@ -28,11 +29,12 @@ export default function Chat() {
       spacing={2}
     >
       <Grid style={{ paddingRight: "0px" }}className={"side-nav-chatbox"}
-        xs={2}
+        xs={3}
       >
+
         <ActiveUserList socketManager = {socketManager}  />
       </Grid>
-      <Grid style={{ padding: "8px 0px" }} xs={10}>
+      <Grid style={{ padding: "8px 0px" }} xs={9}>
         {activeUser ? (
           <ChatBox socketManager={socketManager} />
         ) : (

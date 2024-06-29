@@ -2,7 +2,7 @@ import Avatar from "@mui/joy/Avatar";
 import Badge from "@mui/joy/Badge";
 import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import "../../../App.css";
 import { Paper, Stack, Typography } from "@mui/material";
 import { RootState } from "../../../redux-store/store";
@@ -23,6 +23,8 @@ interface SockProps {
 
 export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
   const {activeUser} = useContext(ActiveContext)
+  const stackRef = useRef(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const [newMessage, setNewMessage] = useState("");
   const currentUser = sessionStorage.getItem("ID");
   const handleMessageChange = (event: any) => {setNewMessage(event.target.value);};
@@ -30,10 +32,25 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
   const chatService = new ChatManager(socketManager)
   const currentUsers = activeUsers.filter((user: ActiveUser) => 
     user.userInfo.userId == activeUser.userInfo.userId
-  ) 
+  )
+  
+  useEffect(() => {
+    scrollToBottom();
+  }, [currentUsers[0].messages]);
   const sendMessage = () => {
     chatService.sendMessage(newMessage,activeUser)
     setNewMessage("");
+  };
+
+  const scrollToBottom = () => {
+    if (stackRef.current) {
+      const scrollHeight = stackRef.current.scrollHeight;
+      const clientHeight = stackRef.current.clientHeight;
+      const maxScrollTop = scrollHeight - clientHeight;
+      const margin = 20; // Adjust this margin value as needed
+
+      stackRef.current.scrollTop = maxScrollTop + margin;
+    }
   };
 
   return (
@@ -76,7 +93,7 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
             <VideoCallIcon sx={{backgroundColor : '#dc67bf'}} className="icons"></VideoCallIcon>
           </Stack>
         </Stack>
-        <Stack className="overflow-y-auto overflow-x-hidden"  style={{ flexGrow: 1 }}>
+        <Stack className="overflow-y-auto overflow-x-hidden" ref={stackRef}  style={{ flexGrow: 1, marginBottom : "100px" }}>
           {
           currentUsers[0].messages.map((message : UserMessage, index: number) => (
             <Stack
@@ -141,7 +158,9 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
               </Paper>
             </Stack>
           ))}
-             <div
+          
+        </Stack>
+        <div
           className="messageBox"
         >
           <input
@@ -171,7 +190,6 @@ export const ChatBox : React.FC<SockProps> = ({ socketManager }) => {
             <SendIcon></SendIcon>
           </button>
         </div>
-        </Stack>
      
       </Stack>
     </div>

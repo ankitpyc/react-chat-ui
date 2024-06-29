@@ -214,5 +214,6 @@
   display: flex;
   align-items: center;
   padding: 2%;
-  width: 80%;
+  width: 90%;
+  max-width: -webkit-fill-available;
 }
